@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedBank - Online Banking Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Page -->
+        <div id="loginPage" class="page active">
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="bank-logo">🏦</div>
+                    <h1>RedBank</h1>
+                    <p class="tagline">Your Trusted Online Banking Partner</p>
+                    
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" placeholder="Enter username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">Login</button>
+                        
+                        <p class="demo-hint">Demo: username: demo | password: demo123</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page">
+            <nav class="navbar">
+                <div class="navbar-brand">🏦 RedBank</div>
+                <div class="navbar-menu">
+                    <a href="#" onclick="showPage('dashboardPage')" class="nav-link active">Dashboard</a>
+                    <a href="#" onclick="showPage('transferPage')" class="nav-link">Transfer</a>
+                    <a href="#" onclick="showPage('historyPage')" class="nav-link">History</a>
+                    <button onclick="logout()" class="btn-logout">Logout</button>
+                </div>
+            </nav>
+
+            <div class="dashboard-container">
+                <div class="welcome-section">
+                    <h1>Welcome, <span id="userName">User</span>!</h1>
+                    <p>Manage your finances with ease</p>
+                </div>
+
+                <div class="accounts-grid">
+                    <div class="account-card">
+                        <div class="account-header">
+                            <h3>Checking Account</h3>
+                            <span class="account-type">Primary</span>
+                        </div>
+                        <div class="account-number">•••• •••• •••• 1234</div>
+                        <div class="balance-section">
+                            <p class="balance-label">Current Balance</p>
+                            <p class="balance-amount" id="checkingBalance">$5,250.00</p>
+                        </div>
+                    </div>
+
+                    <div class="account-card">
+                        <div class="account-header">
+                            <h3>Savings Account</h3>
+                            <span class="account-type">Secondary</span>
+                        </div>
+                        <div class="account-number">•••• •••• •••• 5678</div>
+                        <div class="balance-section">
+                            <p class="balance-label">Current Balance</p>
+                            <p class="balance-amount" id="savingsBalance">$12,500.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h2>Quick Actions</h2>
+                    <div class="actions-grid">
+                        <button onclick="showPage('transferPage')" class="action-btn">
+                            <span class="action-icon">💸</span>
+                            <span>Transfer Money</span>
+                        </button>
+                        <button class="action-btn">
+                            <span class="action-icon">📱</span>
+                            <span>Pay Bills</span>
+                        </button>
+                        <button class="action-btn">
+                            <span class="action-icon">💳</span>
+                            <span>Request Card</span>
+                        </button>
+                        <button onclick="showPage('historyPage')" class="action-btn">
+                            <span class="action-icon">📋</span>
+                            <span>View History</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="recent-transactions">
+                    <h2>Recent Transactions</h2>
+                    <div id="recentTxns" class="transaction-list">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transfer Page -->
+        <div id="transferPage" class="page">
+            <nav class="navbar">
+                <div class="navbar-brand">🏦 RedBank</div>
+                <div class="navbar-menu">
+                    <a href="#" onclick="showPage('dashboardPage')" class="nav-link">Dashboard</a>
+                    <a href="#" onclick="showPage('transferPage')" class="nav-link active">Transfer</a>
+                    <a href="#" onclick="showPage('historyPage')" class="nav-link">History</a>
+                    <button onclick="logout()" class="btn-logout">Logout</button>
+                </div>
+            </nav>
+
+            <div class="transfer-container">
+                <div class="transfer-card">
+                    <h1>Transfer Money</h1>
+                    
+                    <form id="transferForm">
+                        <div class="form-group">
+                            <label for="fromAccount">From Account</label>
+                            <select id="fromAccount" required>
+                                <option value="">Select account</option>
+                                <option value="checking">Checking (•••• 1234)</option>
+                                <option value="savings">Savings (•••• 5678)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="toAccount">To Account</label>
+                            <select id="toAccount" required>
+                                <option value="">Select account</option>
+                                <option value="checking">Checking (•••• 1234)</option>
+                                <option value="savings">Savings (•••• 5678)</option>
+                                <option value="external">External Account</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount">Amount ($)</label>
+                            <input type="number" id="amount" placeholder="0.00" min="0" step="0.01" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" id="description" placeholder="Add a note (optional)">
+                        </div>
+
+                        <button type="submit" class="btn-primary">Transfer Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Page -->
+        <div id="historyPage" class="page">
+            <nav class="navbar">
+                <div class="navbar-brand">🏦 RedBank</div>
+                <div class="navbar-menu">
+                    <a href="#" onclick="showPage('dashboardPage')" class="nav-link">Dashboard</a>
+                    <a href="#" onclick="showPage('transferPage')" class="nav-link">Transfer</a>
+                    <a href="#" onclick="showPage('historyPage')" class="nav-link active">History</a>
+                    <button onclick="logout()" class="btn-logout">Logout</button>
+                </div>
+            </nav>
+
+            <div class="history-container">
+                <h1>Transaction History</h1>
+                
+                <div class="filter-section">
+                    <select id="historyFilter">
+                        <option value="all">All Transactions</option>
+                        <option value="deposit">Deposits Only</option>
+                        <option value="withdrawal">Withdrawals Only</option>
+                        <option value="transfer">Transfers Only</option>
+                    </select>
+                </div>
+
+                <div id="transactionHistory" class="transaction-list full-history">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
