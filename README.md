@@ -6,6 +6,7 @@ Static storefront demo for shopping boat parts and construction materials, inclu
 
 - Product catalog for boat parts, steel stock, and construction materials
 - Search by keyword and filter by category or steel thickness
+- Sort products and inspect a highlighted detail view with availability and lead-time info
 - Quote cart with quantity controls and estimated freight
 - Quote request form for project pricing follow-up
 

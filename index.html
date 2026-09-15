@@ -88,6 +88,16 @@
                             <option value="all">All thicknesses</option>
                         </select>
                     </label>
+
+                    <label class="filter-control">
+                        <span>Sort by</span>
+                        <select id="sortFilter">
+                            <option value="featured">Featured products</option>
+                            <option value="price-asc">Price: low to high</option>
+                            <option value="price-desc">Price: high to low</option>
+                            <option value="name-asc">Name: A to Z</option>
+                        </select>
+                    </label>
                 </div>
             </section>
 
@@ -147,6 +157,48 @@
 
                     <div id="quoteMessage" class="quote-message" aria-live="polite"></div>
                 </aside>
+            </section>
+
+            <section class="detail-panel" id="detailPanel" aria-labelledby="detailHeading">
+                <div class="section-heading">
+                    <p class="eyebrow">Product spotlight</p>
+                    <h2 id="detailHeading">Selected product</h2>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="detail-summary">
+                        <div class="detail-icon" id="detailIcon" aria-hidden="true">⚓</div>
+                        <div>
+                            <p class="detail-category" id="detailCategory">Boat Parts</p>
+                            <h3 id="detailName">Choose a product to inspect its specs</h3>
+                            <p id="detailDescription">Review fitment, stock level, lead time, and material details before adding it to your quote cart.</p>
+                        </div>
+                    </div>
+
+                    <div class="detail-meta-grid">
+                        <article>
+                            <span>Material</span>
+                            <strong id="detailMaterial">—</strong>
+                        </article>
+                        <article>
+                            <span>Thickness</span>
+                            <strong id="detailThickness">—</strong>
+                        </article>
+                        <article>
+                            <span>Availability</span>
+                            <strong id="detailInventory">—</strong>
+                        </article>
+                        <article>
+                            <span>Lead time</span>
+                            <strong id="detailLeadTime">—</strong>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="detail-footer">
+                    <ul id="detailApplications" class="detail-applications"></ul>
+                    <button class="btn-primary" id="detailAddButton" type="button">Add selected product</button>
+                </div>
             </section>
 
             <section class="materials-section" id="materials">

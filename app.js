@@ -7,7 +7,11 @@ const products = [
         price: 189.99,
         unit: "kit",
         material: "Galvanized steel",
-        description: "Anchor, chain, shackles, and line sized for center console and work boats."
+        description: "Anchor, chain, shackles, and line sized for center console and work boats.",
+        inventory: "In stock",
+        leadTime: "Ships in 1-2 days",
+        icon: "⚓",
+        applications: ["Center console anchoring", "Dock tie-off backups", "Service boat retrofits"]
     },
     {
         id: "cleat-set",
@@ -17,7 +21,11 @@ const products = [
         price: 74.5,
         unit: "pair",
         material: "316 stainless steel",
-        description: "Corrosion-resistant dock and deck cleats for mooring upgrades."
+        description: "Corrosion-resistant dock and deck cleats for mooring upgrades.",
+        inventory: "In stock",
+        leadTime: "Ships today",
+        icon: "🪝",
+        applications: ["Dock edge upgrades", "Pontoon tie-down points", "Mooring cleat replacements"]
     },
     {
         id: "bilge-pump",
@@ -27,7 +35,11 @@ const products = [
         price: 96.0,
         unit: "unit",
         material: "Composite housing",
-        description: "1100 GPH pump with float switch for small craft and utility vessels."
+        description: "1100 GPH pump with float switch for small craft and utility vessels.",
+        inventory: "Low stock",
+        leadTime: "Ships in 2-3 days",
+        icon: "🚤",
+        applications: ["Utility skiffs", "Tender bilge replacement", "Workboat water management"]
     },
     {
         id: "marine-fasteners",
@@ -37,7 +49,11 @@ const products = [
         price: 58.25,
         unit: "box",
         material: "Stainless steel",
-        description: "Mixed screws, bolts, washers, and lock nuts for hardware replacements."
+        description: "Mixed screws, bolts, washers, and lock nuts for hardware replacements.",
+        inventory: "In stock",
+        leadTime: "Ships today",
+        icon: "🔩",
+        applications: ["Console refits", "Hatch hardware swaps", "Dock hardware service kits"]
     },
     {
         id: "sheet-plate-18",
@@ -47,7 +63,11 @@ const products = [
         price: 84.0,
         unit: "sheet",
         material: "A36 steel",
-        description: "4x8 structural plate for brackets, patch work, and general fabrication."
+        description: "4x8 structural plate for brackets, patch work, and general fabrication.",
+        inventory: "In stock",
+        leadTime: "Warehouse pickup today",
+        icon: "🧱",
+        applications: ["Patch panels", "Mounting brackets", "Light fabrication jobs"]
     },
     {
         id: "sheet-plate-316",
@@ -57,7 +77,11 @@ const products = [
         price: 126.0,
         unit: "sheet",
         material: "A36 steel",
-        description: "Mid-weight plate for dock repairs, trailer reinforcement, and framing."
+        description: "Mid-weight plate for dock repairs, trailer reinforcement, and framing.",
+        inventory: "In stock",
+        leadTime: "Ships in 1-2 days",
+        icon: "🏗️",
+        applications: ["Dock frame gussets", "Trailer reinforcement", "Structural repair panels"]
     },
     {
         id: "sheet-plate-14",
@@ -67,7 +91,11 @@ const products = [
         price: 158.5,
         unit: "sheet",
         material: "A36 steel",
-        description: "Heavy-duty plate suited for ramps, support pads, and welded fixtures."
+        description: "Heavy-duty plate suited for ramps, support pads, and welded fixtures.",
+        inventory: "Low stock",
+        leadTime: "Ships in 3-4 days",
+        icon: "🛠️",
+        applications: ["Equipment pads", "Ramps and landings", "Heavy-duty welded fixtures"]
     },
     {
         id: "checker-plate-38",
@@ -77,7 +105,11 @@ const products = [
         price: 214.75,
         unit: "sheet",
         material: "Carbon steel",
-        description: "Slip-resistant deck plate for gangways, work platforms, and shop floors."
+        description: "Slip-resistant deck plate for gangways, work platforms, and shop floors.",
+        inventory: "Special order",
+        leadTime: "Ships in 5-7 days",
+        icon: "🧰",
+        applications: ["Gangways", "Service platforms", "Slip-resistant floor repairs"]
     },
     {
         id: "rebar-bundle",
@@ -87,7 +119,11 @@ const products = [
         price: 132.0,
         unit: "bundle",
         material: "Grade 60 steel",
-        description: "Concrete reinforcement bundle for footings, pilings, and retaining walls."
+        description: "Concrete reinforcement bundle for footings, pilings, and retaining walls.",
+        inventory: "In stock",
+        leadTime: "Next-day delivery",
+        icon: "🏢",
+        applications: ["Footings and slabs", "Pilings", "Retaining wall reinforcement"]
     },
     {
         id: "angle-iron",
@@ -97,12 +133,17 @@ const products = [
         price: 46.25,
         unit: "length",
         material: "Hot rolled steel",
-        description: "20-foot angle stock for trailers, bracing, shelving, and general fabrication."
+        description: "20-foot angle stock for trailers, bracing, shelving, and general fabrication.",
+        inventory: "In stock",
+        leadTime: "Ships in 1-2 days",
+        icon: "📐",
+        applications: ["Rack bracing", "Trailer rails", "General steel framing"]
     }
 ];
 
 const cart = new Map();
 const productsById = new Map(products.map((product) => [product.id, product]));
+let selectedProductId = products[0].id;
 
 const productGrid = document.getElementById("productGrid");
 const resultsCount = document.getElementById("resultsCount");
@@ -114,10 +155,22 @@ const cartTotal = document.getElementById("cartTotal");
 const quoteMessage = document.getElementById("quoteMessage");
 const categoryFilter = document.getElementById("categoryFilter");
 const thicknessFilter = document.getElementById("thicknessFilter");
+const sortFilter = document.getElementById("sortFilter");
 const searchInput = document.getElementById("searchInput");
 const quoteForm = document.getElementById("quoteForm");
 const clearFiltersButton = document.getElementById("clearFiltersButton");
 const bundleButton = document.getElementById("bundleButton");
+const detailPanel = document.getElementById("detailPanel");
+const detailIcon = document.getElementById("detailIcon");
+const detailCategory = document.getElementById("detailCategory");
+const detailName = document.getElementById("detailName");
+const detailDescription = document.getElementById("detailDescription");
+const detailMaterial = document.getElementById("detailMaterial");
+const detailThickness = document.getElementById("detailThickness");
+const detailInventory = document.getElementById("detailInventory");
+const detailLeadTime = document.getElementById("detailLeadTime");
+const detailApplications = document.getElementById("detailApplications");
+const detailAddButton = document.getElementById("detailAddButton");
 
 function currency(value) {
     return new Intl.NumberFormat("en-US", {
@@ -189,9 +242,10 @@ function populateFilters() {
 function getFilteredProducts() {
     const category = categoryFilter.value;
     const thickness = thicknessFilter.value;
+    const sortOrder = sortFilter.value;
     const term = searchInput.value.trim().toLowerCase();
 
-    return products.filter((product) => {
+    const filteredProducts = products.filter((product) => {
         const categoryMatch = category === "all" || product.category === category;
         const thicknessMatch = thickness === "all" || product.thickness === thickness;
         const termMatch = !term || [product.name, product.category, product.description, product.material]
@@ -201,6 +255,24 @@ function getFilteredProducts() {
 
         return categoryMatch && thicknessMatch && termMatch;
     });
+
+    if (sortOrder === "price-asc") {
+        return [...filteredProducts].sort((left, right) => left.price - right.price);
+    }
+
+    if (sortOrder === "price-desc") {
+        return [...filteredProducts].sort((left, right) => right.price - left.price);
+    }
+
+    if (sortOrder === "name-asc") {
+        return [...filteredProducts].sort((left, right) => left.name.localeCompare(right.name));
+    }
+
+    return filteredProducts;
+}
+
+function inventoryClass(inventory) {
+    return inventory.toLowerCase().replace(/\s+/g, "-");
 }
 
 function productCard(product) {
@@ -218,6 +290,10 @@ function productCard(product) {
                 ${steelMeta}
             </div>
             <p class="product-description">${escapeHtml(product.description)}</p>
+            <div class="product-highlights">
+                <span class="inventory-pill ${inventoryClass(product.inventory)}">${escapeHtml(product.inventory)}</span>
+                <span class="lead-time">${escapeHtml(product.leadTime)}</span>
+            </div>
             <dl class="product-meta">
                 <div>
                     <dt>Material</dt>
@@ -228,12 +304,33 @@ function productCard(product) {
                     <dd>${escapeHtml(product.unit)}</dd>
                 </div>
             </dl>
-            <div class="product-card-footer">
+            <div class="product-card-footer product-card-actions">
                 <strong>${currency(product.price)}</strong>
-                <button class="btn-primary" type="button" data-product-id="${escapeHtml(product.id)}">Add to cart</button>
+                <div class="button-group">
+                    <button class="btn-secondary" type="button" data-detail-id="${escapeHtml(product.id)}">View details</button>
+                    <button class="btn-primary" type="button" data-product-id="${escapeHtml(product.id)}">Add to cart</button>
+                </div>
             </div>
         </article>
     `;
+}
+
+function renderProductDetail(productId = selectedProductId) {
+    const product = productsById.get(productId) || products[0];
+    selectedProductId = product.id;
+
+    detailIcon.textContent = product.icon;
+    detailCategory.textContent = product.category;
+    detailName.textContent = product.name;
+    detailDescription.textContent = product.description;
+    detailMaterial.textContent = product.material;
+    detailThickness.textContent = product.thickness === "n/a" ? "Standard fitment" : product.thickness;
+    detailInventory.textContent = product.inventory;
+    detailLeadTime.textContent = product.leadTime;
+    detailApplications.innerHTML = product.applications
+        .map((application) => `<li>${escapeHtml(application)}</li>`)
+        .join("");
+    detailAddButton.dataset.productId = product.id;
 }
 
 function renderProducts() {
@@ -339,6 +436,13 @@ function addBundle() {
 }
 
 function handleProductGridClick(event) {
+    const detailButton = event.target.closest("button[data-detail-id]");
+    if (detailButton) {
+        renderProductDetail(detailButton.dataset.detailId);
+        detailPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+    }
+
     const button = event.target.closest("button[data-product-id]");
     if (!button) {
         return;
@@ -367,6 +471,7 @@ function handleCartClick(event) {
 function clearFilters() {
     categoryFilter.value = "all";
     thicknessFilter.value = "all";
+    sortFilter.value = "featured";
     searchInput.value = "";
     renderProducts();
 }
@@ -388,13 +493,16 @@ function handleQuoteSubmit(event) {
 populateFilters();
 renderProducts();
 renderCart();
+renderProductDetail();
 
 productGrid.addEventListener("click", handleProductGridClick);
 cartItems.addEventListener("click", handleCartClick);
 categoryFilter.addEventListener("change", renderProducts);
 thicknessFilter.addEventListener("change", renderProducts);
+sortFilter.addEventListener("change", renderProducts);
 searchInput.addEventListener("input", renderProducts);
 clearFiltersButton.addEventListener("click", clearFilters);
 quoteForm.addEventListener("submit", handleQuoteSubmit);
 bundleButton.addEventListener("click", addBundle);
 quoteForm.addEventListener("input", clearQuoteMessage);
+detailAddButton.addEventListener("click", () => addToCart(detailAddButton.dataset.productId, 1));
