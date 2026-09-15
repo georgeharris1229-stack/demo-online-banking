@@ -243,6 +243,8 @@ const customerNameInput = document.getElementById("customerName");
 const customerEmailInput = document.getElementById("customerEmail");
 const shippingAddressInput = document.getElementById("projectNotes");
 const paymentMethodInput = document.getElementById("paymentMethod");
+const recommendationsCaption = document.getElementById("recommendationsCaption");
+const recommendationsGrid = document.getElementById("recommendationsGrid");
 
 function currency(value) {
     return new Intl.NumberFormat("en-US", {
@@ -296,6 +298,22 @@ function readStoredJson(key) {
     }
 }
 
+function handleRecommendationsClick(event) {
+    const detailButton = event.target.closest("button[data-recommend-detail-id]");
+    if (detailButton) {
+        renderProductDetail(detailButton.dataset.recommendDetailId);
+        detailPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+    }
+
+    const addButton = event.target.closest("button[data-recommend-id]");
+    if (!addButton) {
+        return;
+    }
+
+    addToCart(addButton.dataset.recommendId, 1);
+}
+
 function writeStoredJson(key, value) {
     if (!storage) {
         return;
@@ -309,25 +327,25 @@ function removeStoredValue(key) {
         return;
     }
 
-    function loadStoredUser() {
-        const storedUser = readStoredJson(storageKeys.user);
-        if (!storedUser || typeof storedUser !== "object") {
-            return;
-        }
+    storage.removeItem(key);
+}
 
-        const name = sanitizePlainText(storedUser.name || "");
-        const email = String(storedUser.email || "").trim();
-        if (!email) {
-            return;
-        }
-
-        currentUser = {
-            name: name || email.split("@")[0],
-            email
-        };
+function loadStoredUser() {
+    const storedUser = readStoredJson(storageKeys.user);
+    if (!storedUser || typeof storedUser !== "object") {
+        return;
     }
 
-    storage.removeItem(key);
+    const name = sanitizePlainText(storedUser.name || "");
+    const email = String(storedUser.email || "").trim();
+    if (!email) {
+        return;
+    }
+
+    currentUser = {
+        name: name || email.split("@")[0],
+        email
+    };
 }
 
 function loadStoredSelection() {
@@ -595,6 +613,79 @@ function renderCheckoutContext() {
     summaryPayment.textContent = paymentPreview();
 }
 
+function recommendationScore(product, baseProduct) {
+    let score = 0;
+
+    if (product.category === baseProduct.category) {
+        score += 4;
+    }
+
+    if (product.thickness === baseProduct.thickness) {
+        score += 2;
+    }
+
+    if (product.badge) {
+        score += 1;
+    }
+
+    if (!cart.has(product.id)) {
+        score += 1;
+    }
+
+    if (product.inventory === "In stock") {
+        score += 1;
+    }
+
+    return score;
+}
+
+function recommendationReason(product, baseProduct) {
+    if (product.category === baseProduct.category && product.thickness === baseProduct.thickness) {
+        return `Matches your ${baseProduct.thickness} ${baseProduct.category.toLowerCase()} pick`;
+    }
+
+    if (product.category === baseProduct.category) {
+        return `Another popular ${product.category.toLowerCase()} pick`;
+    }
+
+    if (product.thickness === baseProduct.thickness) {
+        return `More from the ${product.thickness} collection`;
+    }
+
+    return "Popular with shoppers like you";
+}
+
+function renderRecommendations() {
+    const baseProduct = productsById.get(selectedProductId) || products[0];
+    const recommendedProducts = products
+        .filter((product) => product.id !== baseProduct.id)
+        .sort((left, right) => recommendationScore(right, baseProduct) - recommendationScore(left, baseProduct))
+        .slice(0, 3);
+
+    recommendationsCaption.textContent = cart.size
+        ? `Inspired by ${baseProduct.name} and tuned around what is already in your cart.`
+        : `Inspired by ${baseProduct.name}.`;
+
+    recommendationsGrid.innerHTML = recommendedProducts.map((product) => `
+        <article class="recommendation-card">
+            <p class="product-category">${escapeHtml(product.category)}</p>
+            <h3>${escapeHtml(product.name)}</h3>
+            <p class="product-description">${escapeHtml(recommendationReason(product, baseProduct))}</p>
+            <div class="product-highlights">
+                <span class="inventory-pill ${inventoryClass(product.inventory)}">${escapeHtml(product.inventory)}</span>
+                <span class="lead-time">${escapeHtml(product.leadTime)}</span>
+            </div>
+            <div class="product-card-footer product-card-actions">
+                <strong>${currency(product.price)}</strong>
+                <div class="button-group">
+                    <button class="btn-secondary" type="button" data-recommend-detail-id="${escapeHtml(product.id)}">View</button>
+                    <button class="btn-primary" type="button" data-recommend-id="${escapeHtml(product.id)}">Add</button>
+                </div>
+            </div>
+        </article>
+    `).join("");
+}
+
 function productCard(product) {
     const term = searchInput.value.trim();
     const badge = product.badge
@@ -664,6 +755,8 @@ function renderProductDetail(productId = selectedProductId) {
     if (storage) {
         storage.setItem(storageKeys.selectedProductId, product.id);
     }
+
+    renderRecommendations();
 }
 
 function renderProducts() {
@@ -778,6 +871,7 @@ function renderCart() {
     applyCouponButton.disabled = !couponInput.value.trim();
     saveCart();
     renderWishlist();
+    renderRecommendations();
 
     if (!entries.length) {
         cartItems.innerHTML = `
@@ -1027,9 +1121,11 @@ customerEmailInput.value = currentUser?.email || "";
 renderProducts();
 renderCart();
 renderProductDetail();
+renderRecommendations();
 
 productGrid.addEventListener("click", handleProductGridClick);
 cartItems.addEventListener("click", handleCartClick);
+recommendationsGrid.addEventListener("click", handleRecommendationsClick);
 wishlistItems.addEventListener("click", handleWishlistClick);
 categoryFilter.addEventListener("change", handleFiltersChange);
 thicknessFilter.addEventListener("change", handleFiltersChange);

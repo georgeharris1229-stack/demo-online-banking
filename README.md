@@ -7,6 +7,7 @@ Static shopping app demo for browsing curated lifestyle products, adding items t
 - Product catalog with categories for tech, home, wellness, and accessories
 - Search by keyword and filter by category or collection
 - Search-term highlighting in catalog results for faster scanning
+- Product recommendations that react to the selected product and current cart
 - Sort products and inspect a highlighted detail view with availability and delivery info
 - Shopping cart with quantity controls, clear-cart action, coupon support, free-shipping threshold, and live totals
 - Fuller checkout summary with item counts, units, account/contact previews, coupon status, tax estimate, delivery tier, savings, and a breakdown of order costs

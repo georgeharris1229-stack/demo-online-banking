@@ -700,6 +700,28 @@ mark {
     color: #176b52;
 }
 
+.recommendations-panel {
+    margin-top: 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+
+.recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.recommendation-card {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 18px;
+    background: #f8fbff;
+}
+
 .auth-main {
     padding: 32px 0 48px;
 }
