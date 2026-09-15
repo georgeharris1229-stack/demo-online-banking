@@ -261,13 +261,22 @@ textarea {
     line-height: 1.6;
 }
 
+mark {
+    background: #fff1a8;
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 4px;
+}
+
 .product-highlights,
 .button-group,
 .detail-grid,
 .detail-summary,
 .detail-footer,
 .detail-meta-grid,
-.detail-applications {
+.detail-applications,
+.card-pill-stack,
+.checkout-summary {
     display: flex;
 }
 
@@ -279,6 +288,24 @@ textarea {
     color: var(--accent-dark);
     font-size: 0.85rem;
     font-weight: 700;
+}
+
+.product-badge {
+    display: inline-flex;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #102033;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.card-pill-stack {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .pill.neutral {
@@ -489,6 +516,31 @@ textarea {
     transition: width 0.2s ease;
 }
 
+.checkout-summary {
+    margin-top: 18px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.checkout-summary > div {
+    flex: 1 1 120px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    background: #f8fbff;
+}
+
+.checkout-summary span {
+    display: block;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.checkout-summary strong {
+    font-size: 1rem;
+}
+
 .detail-panel {
     margin-top: 24px;
     background: var(--panel);
@@ -629,7 +681,8 @@ textarea {
 
     .product-card-header,
     .product-card-footer,
-    .cart-header {
+    .cart-header,
+    .card-pill-stack {
         gap: 12px;
         flex-direction: column;
         align-items: flex-start;

@@ -4,6 +4,7 @@ const products = [
         name: "Wireless Headphones",
         category: "Tech",
         thickness: "Focus",
+        badge: "Best seller",
         price: 129.99,
         unit: "each",
         material: "Soft-touch plastic & memory foam",
@@ -18,6 +19,7 @@ const products = [
         name: "Smart Desk Lamp",
         category: "Home",
         thickness: "Focus",
+        badge: "Editor pick",
         price: 68.5,
         unit: "each",
         material: "Aluminum",
@@ -32,6 +34,7 @@ const products = [
         name: "Insulated Water Bottle",
         category: "Wellness",
         thickness: "Reset",
+        badge: "Trending",
         price: 32.0,
         unit: "each",
         material: "Stainless steel",
@@ -60,6 +63,7 @@ const products = [
         name: "Chunky Knit Throw Blanket",
         category: "Home",
         thickness: "Cozy",
+        badge: "New",
         price: 58.0,
         unit: "each",
         material: "Recycled polyester knit",
@@ -116,6 +120,7 @@ const products = [
         name: "Standing Desk Riser",
         category: "Home",
         thickness: "Focus",
+        badge: "Premium",
         price: 149.0,
         unit: "each",
         material: "Engineered wood & steel",
@@ -189,6 +194,9 @@ const detailApplications = document.getElementById("detailApplications");
 const detailAddButton = document.getElementById("detailAddButton");
 const shippingMessage = document.getElementById("shippingMessage");
 const shippingProgressBar = document.getElementById("shippingProgressBar");
+const summaryItemCount = document.getElementById("summaryItemCount");
+const summaryDelivery = document.getElementById("summaryDelivery");
+const summarySavings = document.getElementById("summarySavings");
 
 function currency(value) {
     return new Intl.NumberFormat("en-US", {
@@ -205,6 +213,10 @@ function escapeHtml(value) {
         "\"": "&quot;",
         "'": "&#39;"
     }[character]));
+}
+
+function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function setQuoteMessage(message, state) {
@@ -369,17 +381,35 @@ function inventoryClass(inventory) {
     return inventory.toLowerCase().replace(/\s+/g, "-");
 }
 
+function highlightMatch(value, term) {
+    const safeValue = escapeHtml(value);
+    if (!term) {
+        return safeValue;
+    }
+
+    const pattern = new RegExp(`(${escapeRegExp(term)})`, "ig");
+    return safeValue.replace(pattern, "<mark>$1</mark>");
+}
+
 function productCard(product) {
+    const term = searchInput.value.trim();
+    const badge = product.badge
+        ? `<span class="product-badge">${escapeHtml(product.badge)}</span>`
+        : "";
+
     return `
         <article class="product-card">
             <div class="product-card-header">
                 <div>
                     <p class="product-category">${escapeHtml(product.category)}</p>
-                    <h3>${escapeHtml(product.name)}</h3>
+                    <h3>${highlightMatch(product.name, term)}</h3>
                 </div>
-                <span class="pill">${escapeHtml(product.thickness)} collection</span>
+                <div class="card-pill-stack">
+                    ${badge}
+                    <span class="pill">${escapeHtml(product.thickness)} collection</span>
+                </div>
             </div>
-            <p class="product-description">${escapeHtml(product.description)}</p>
+            <p class="product-description">${highlightMatch(product.description, term)}</p>
             <div class="product-highlights">
                 <span class="inventory-pill ${inventoryClass(product.inventory)}">${escapeHtml(product.inventory)}</span>
                 <span class="lead-time">${escapeHtml(product.leadTime)}</span>
@@ -490,6 +520,7 @@ function renderCart() {
     const shippingProgress = subtotal <= 0
         ? 0
         : Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
+    const savings = subtotal >= FREE_SHIPPING_THRESHOLD ? STANDARD_SHIPPING : 0;
 
     cartCount.textContent = `${count} item${count === 1 ? "" : "s"}`;
     cartSubtotal.textContent = currency(subtotal);
@@ -499,6 +530,13 @@ function renderCart() {
         ? "You unlocked free shipping."
         : `Add ${currency(freeShippingGap || FREE_SHIPPING_THRESHOLD)} to unlock free shipping.`;
     shippingProgressBar.style.width = `${shippingProgress}%`;
+    summaryItemCount.textContent = String(count);
+    summaryDelivery.textContent = subtotal >= FREE_SHIPPING_THRESHOLD
+        ? "Free standard shipping"
+        : count > 0
+            ? "Standard shipping"
+            : "Standard shipping";
+    summarySavings.textContent = savings > 0 ? currency(savings) : "$0.00";
     clearCartButton.disabled = !entries.length;
     saveCart();
 
