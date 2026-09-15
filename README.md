@@ -11,4 +11,4 @@ Static storefront demo for shopping boat parts and construction materials, inclu
 
 ## Run locally
 
-Open `/home/runner/work/demo-online-banking/demo-online-banking/index.html` in a browser.
+Open `index.html` from the repository root in a browser.

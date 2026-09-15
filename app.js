@@ -125,6 +125,16 @@ function currency(value) {
     }).format(value);
 }
 
+function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;"
+    }[character]));
+}
+
 function setQuoteMessage(message, state) {
     quoteMessage.textContent = message;
     quoteMessage.className = `quote-message ${state}`;
@@ -176,32 +186,32 @@ function getFilteredProducts() {
 
 function productCard(product) {
     const steelMeta = product.thickness !== "n/a"
-        ? `<span class="pill">${product.thickness} thickness</span>`
+        ? `<span class="pill">${escapeHtml(product.thickness)} thickness</span>`
         : `<span class="pill neutral">Standard fitment</span>`;
 
     return `
         <article class="product-card">
             <div class="product-card-header">
                 <div>
-                    <p class="product-category">${product.category}</p>
-                    <h3>${product.name}</h3>
+                    <p class="product-category">${escapeHtml(product.category)}</p>
+                    <h3>${escapeHtml(product.name)}</h3>
                 </div>
                 ${steelMeta}
             </div>
-            <p class="product-description">${product.description}</p>
+            <p class="product-description">${escapeHtml(product.description)}</p>
             <dl class="product-meta">
                 <div>
                     <dt>Material</dt>
-                    <dd>${product.material}</dd>
+                    <dd>${escapeHtml(product.material)}</dd>
                 </div>
                 <div>
                     <dt>Unit</dt>
-                    <dd>${product.unit}</dd>
+                    <dd>${escapeHtml(product.unit)}</dd>
                 </div>
             </dl>
             <div class="product-card-footer">
                 <strong>${currency(product.price)}</strong>
-                <button class="btn-primary" type="button" data-product-id="${product.id}">Add to cart</button>
+                <button class="btn-primary" type="button" data-product-id="${escapeHtml(product.id)}">Add to cart</button>
             </div>
         </article>
     `;
@@ -242,6 +252,12 @@ function updateCartQuantity(productId, nextQuantity) {
 }
 
 function renderCart() {
+    for (const productId of cart.keys()) {
+        if (!products.some((item) => item.id === productId)) {
+            cart.delete(productId);
+        }
+    }
+
     const entries = [...cart.entries()];
     const count = entries.reduce((sum, [, quantity]) => sum + quantity, 0);
     const subtotal = entries.reduce((sum, [productId, quantity]) => {
@@ -270,13 +286,13 @@ function renderCart() {
         return `
             <article class="cart-item">
                 <div>
-                    <h3>${product.name}</h3>
-                    <p>${product.category}${product.thickness !== "n/a" ? ` · ${product.thickness}` : ""}</p>
+                    <h3>${escapeHtml(product.name)}</h3>
+                    <p>${escapeHtml(product.category)}${product.thickness !== "n/a" ? ` · ${escapeHtml(product.thickness)}` : ""}</p>
                 </div>
                 <div class="cart-item-controls">
-                    <button class="qty-button" type="button" data-action="decrease" data-product-id="${productId}">−</button>
+                    <button class="qty-button" type="button" data-action="decrease" data-product-id="${escapeHtml(productId)}">−</button>
                     <span>${quantity}</span>
-                    <button class="qty-button" type="button" data-action="increase" data-product-id="${productId}">+</button>
+                    <button class="qty-button" type="button" data-action="increase" data-product-id="${escapeHtml(productId)}">+</button>
                     <strong>${currency(product.price * quantity)}</strong>
                 </div>
             </article>

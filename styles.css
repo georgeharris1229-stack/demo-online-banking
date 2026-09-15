@@ -318,6 +318,14 @@ textarea {
     transform: translateY(-1px);
 }
 
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.qty-button:focus-visible,
+.nav-actions a:focus-visible {
+    outline: 3px solid #ffd166;
+    outline-offset: 3px;
+}
+
 .btn-primary:hover {
     background: var(--accent-dark);
 }
