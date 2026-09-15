@@ -1,158 +1,158 @@
 const products = [
     {
-        id: "wireless-headphones",
-        name: "Wireless Headphones",
-        category: "Tech",
-        thickness: "Focus",
+        id: "cleat-kit",
+        name: "316 Stainless Cleat Kit",
+        category: "Dock Hardware",
+        thickness: "Dockside",
         badge: "Best seller",
-        price: 129.99,
-        unit: "each",
+        price: 84.99,
+        unit: "kit",
         stock: 12,
-        material: "Soft-touch plastic & memory foam",
-        description: "Noise-isolating headphones with 30-hour battery life and quick pairing.",
+        material: "316 stainless steel",
+        description: "Corrosion-resistant cleat kit with backing plates and hardware for dock and deck installs.",
         inventory: "In stock",
         leadTime: "Delivers in 2 days",
-        icon: "🎧",
-        applications: ["Remote work", "Travel listening", "Workout playlists"]
+        icon: "⚓",
+        applications: ["Dock line tie-offs", "Bow upgrades", "Deck hardware replacement"]
     },
     {
-        id: "smart-desk-lamp",
-        name: "Smart Desk Lamp",
-        category: "Home",
-        thickness: "Focus",
+        id: "nav-light-pair",
+        name: "LED Navigation Light Pair",
+        category: "Electrical",
+        thickness: "Offshore",
         badge: "Editor pick",
-        price: 68.5,
-        unit: "each",
+        price: 69.5,
+        unit: "pair",
         stock: 18,
-        material: "Aluminum",
-        description: "Adjustable LED task lamp with touch controls and warm-to-cool light modes.",
+        material: "Sealed marine polymer",
+        description: "Low-draw red and green bow lights with waterproof housing for night visibility.",
         inventory: "In stock",
         leadTime: "Ships today",
         icon: "💡",
-        applications: ["Home office setup", "Bedside reading", "Study sessions"]
+        applications: ["Night cruising", "Coastal compliance", "Bow refits"]
     },
     {
-        id: "insulated-bottle",
-        name: "Insulated Water Bottle",
-        category: "Wellness",
-        thickness: "Reset",
+        id: "bilge-pump",
+        name: "Automatic Bilge Pump",
+        category: "Electrical",
+        thickness: "Maintenance",
         badge: "Trending",
-        price: 32.0,
+        price: 96.0,
         unit: "each",
         stock: 4,
-        material: "Stainless steel",
-        description: "Double-wall bottle that keeps drinks cold for 24 hours or hot for 12.",
+        material: "Composite housing",
+        description: "1100 GPH bilge pump with float switch for center consoles, skiffs, and utility boats.",
         inventory: "Low stock",
         leadTime: "Delivers in 3 days",
-        icon: "🧴",
-        applications: ["Gym sessions", "Commutes", "Desk hydration"]
+        icon: "🚤",
+        applications: ["Bilge replacement", "Utility skiffs", "Emergency drainage"]
     },
     {
-        id: "aroma-diffuser",
-        name: "Aromatherapy Diffuser",
-        category: "Wellness",
-        thickness: "Reset",
-        price: 44.25,
+        id: "anchor-roller",
+        name: "Anchor Roller Assembly",
+        category: "Anchoring",
+        thickness: "Offshore",
+        price: 74.25,
         unit: "each",
         stock: 10,
-        material: "Ceramic & BPA-free reservoir",
-        description: "Ultrasonic diffuser with ambient light settings and automatic shutoff.",
+        material: "Galvanized steel",
+        description: "Bow roller assembly that smooths anchor deployment and protects the rub rail.",
         inventory: "In stock",
         leadTime: "Ships today",
-        icon: "🌿",
-        applications: ["Evening wind-down", "Bedroom comfort", "Yoga spaces"]
+        icon: "🪝",
+        applications: ["Anchor retrieval", "Bow protection", "Trailered boats"]
     },
     {
-        id: "throw-blanket",
-        name: "Chunky Knit Throw Blanket",
-        category: "Home",
-        thickness: "Cozy",
+        id: "marine-fasteners",
+        name: "Marine Fastener Assortment",
+        category: "Dock Hardware",
+        thickness: "Maintenance",
         badge: "New",
         price: 58.0,
-        unit: "each",
+        unit: "box",
         stock: 9,
-        material: "Recycled polyester knit",
-        description: "Soft oversized blanket designed for couches, reading nooks, and guest rooms.",
+        material: "Stainless steel",
+        description: "Mixed screws, bolts, washers, and lock nuts sized for common boat hardware service jobs.",
         inventory: "In stock",
         leadTime: "Delivers in 2 days",
-        icon: "🛋️",
-        applications: ["Living room styling", "Movie nights", "Guest room layers"]
+        icon: "🔩",
+        applications: ["Console refits", "Hatch hardware swaps", "Cleat installation"]
     },
     {
-        id: "portable-speaker",
-        name: "Portable Bluetooth Speaker",
-        category: "Tech",
-        thickness: "Reset",
-        price: 88.0,
+        id: "fender-two-pack",
+        name: "Inflatable Fender Two-Pack",
+        category: "Dock Hardware",
+        thickness: "Dockside",
+        price: 52.0,
         unit: "each",
         stock: 15,
-        material: "Mesh fabric & silicone",
-        description: "Compact waterproof speaker with rich bass and 14-hour playback.",
+        material: "UV-resistant PVC",
+        description: "Twin fender set for protecting hull sides during docking, rafting, and marina tie-ups.",
         inventory: "In stock",
         leadTime: "Delivers in 2 days",
-        icon: "🔊",
-        applications: ["Patio hangs", "Weekend trips", "Kitchen audio"]
+        icon: "🛟",
+        applications: ["Marina slips", "Side tie docking", "Weekend rafting"]
     },
     {
-        id: "planner-set",
-        name: "Weekly Planner Set",
-        category: "Accessories",
-        thickness: "Focus",
-        price: 24.5,
-        unit: "set",
+        id: "vhf-radio",
+        name: "Fixed Mount VHF Radio",
+        category: "Electronics",
+        thickness: "Offshore",
+        price: 149.5,
+        unit: "unit",
         stock: 3,
-        material: "Recycled paper",
-        description: "Minimal desk planner with habit tracker, sticky tabs, and goal sheets.",
+        material: "Marine electronics enclosure",
+        description: "Water-resistant VHF radio with DSC calling and clear display for communication on the water.",
         inventory: "Low stock",
         leadTime: "Ships in 1-2 days",
-        icon: "📒",
-        applications: ["Goal planning", "Desk organization", "Class schedules"]
+        icon: "📻",
+        applications: ["Safety communication", "Offshore running", "Harbor coordination"]
     },
     {
-        id: "canvas-tote",
-        name: "Canvas Market Tote",
-        category: "Accessories",
-        thickness: "Cozy",
-        price: 27.75,
+        id: "boarding-ladder",
+        name: "Folding Boarding Ladder",
+        category: "Deck Gear",
+        thickness: "Family",
+        price: 127.75,
         unit: "each",
         stock: 11,
-        material: "Organic cotton canvas",
-        description: "Structured everyday tote with interior pocket and reinforced straps.",
+        material: "Anodized aluminum",
+        description: "Compact transom ladder with wide steps for easier boarding from the water or dock.",
         inventory: "In stock",
         leadTime: "Ships in 1-2 days",
-        icon: "👜",
-        applications: ["Weekend errands", "Farmers market", "Daily carry"]
+        icon: "🪜",
+        applications: ["Swim platforms", "Family cruising", "Dock reboarding"]
     },
     {
-        id: "standing-desk-riser",
-        name: "Standing Desk Riser",
-        category: "Home",
-        thickness: "Focus",
+        id: "hydraulic-steering-kit",
+        name: "Hydraulic Steering Kit",
+        category: "Steering",
+        thickness: "Offshore",
         badge: "Premium",
-        price: 149.0,
-        unit: "each",
+        price: 389.0,
+        unit: "kit",
         stock: 2,
-        material: "Engineered wood & steel",
-        description: "Adjustable desktop riser for switching between sitting and standing.",
+        material: "Marine-grade hoses and helm pump",
+        description: "Full steering conversion kit for smoother helm response on larger center consoles.",
         inventory: "Special order",
         leadTime: "Ships in 5-7 days",
-        icon: "🖥️",
-        applications: ["Ergonomic workstations", "Shared desks", "Study setups"]
+        icon: "🧭",
+        applications: ["Helm upgrades", "Offshore rigs", "Repower projects"]
     },
     {
-        id: "yoga-mat",
-        name: "Cushioned Yoga Mat",
-        category: "Wellness",
-        thickness: "Reset",
-        price: 39.99,
+        id: "life-jacket-pack",
+        name: "Adult Life Jacket Pack",
+        category: "Safety",
+        thickness: "Family",
+        price: 119.99,
         unit: "each",
         stock: 7,
-        material: "Non-slip natural rubber",
-        description: "Supportive mat with alignment lines for stretching, yoga, and mobility sessions.",
+        material: "USCG-approved flotation foam",
+        description: "Four-pack of adult life jackets sized for day boats, guests, and family trips.",
         inventory: "In stock",
         leadTime: "Delivers tomorrow",
-        icon: "🧘",
-        applications: ["Morning stretches", "Home workouts", "Meditation"]
+        icon: "🦺",
+        applications: ["Family outings", "Guest gear", "Safety compliance"]
     }
 ];
 
@@ -649,7 +649,7 @@ function recommendationReason(product, baseProduct) {
     }
 
     if (product.thickness === baseProduct.thickness) {
-        return `More from the ${product.thickness} collection`;
+        return `More for ${product.thickness} fitment`;
     }
 
     return "Popular with shoppers like you";
@@ -703,7 +703,7 @@ function productCard(product) {
                 </div>
                 <div class="card-pill-stack">
                     ${badge}
-                    <span class="pill">${escapeHtml(product.thickness)} collection</span>
+                    <span class="pill">${escapeHtml(product.thickness)} fitment</span>
                 </div>
             </div>
             <p class="product-description">${highlightMatch(product.description, term)}</p>
@@ -767,7 +767,7 @@ function renderProducts() {
         productGrid.innerHTML = `
             <div class="empty-state">
                 <h3>No products match those filters</h3>
-                <p>Try another category, clear the collection filter, or search for a broader term.</p>
+                <p>Try another category, clear the fitment filter, or search for a broader term.</p>
             </div>
         `;
         return;
@@ -917,10 +917,10 @@ function renderCart() {
 }
 
 function addBundle() {
-    addToCart("wireless-headphones", 1);
-    addToCart("smart-desk-lamp", 1);
-    addToCart("insulated-bottle", 1);
-    addToCart("aroma-diffuser", 1);
+    addToCart("cleat-kit", 1);
+    addToCart("marine-fasteners", 1);
+    addToCart("nav-light-pair", 1);
+    addToCart("bilge-pump", 1);
 }
 
 function handleProductGridClick(event) {

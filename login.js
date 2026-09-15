@@ -94,8 +94,14 @@ function handleLoginSubmit(event) {
 
     writeStoredUser({ name, email });
     loginPassword.value = "";
-    setLoginMessage("Signed in successfully. Return to the store to continue checkout.", "success");
+    setLoginMessage("Signed in successfully. Redirecting you to the boat-parts catalog.", "success");
     renderUser();
+
+    if (typeof window !== "undefined" && window.location) {
+        window.setTimeout(() => {
+            window.location.href = "/index.html";
+        }, 700);
+    }
 }
 
 function handleLogout() {

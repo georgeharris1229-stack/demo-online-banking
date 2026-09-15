@@ -1,13 +1,14 @@
-# LumaCart
+# Harbor Parts Co.
 
-Static shopping app demo for browsing curated lifestyle products, adding items to a cart, and completing a lightweight checkout flow.
+Static boat-parts shopping app demo with a login page, marine product catalog, live cart totals, and a lightweight checkout flow.
 
 ## Features
 
-- Product catalog with categories for tech, home, wellness, and accessories
-- Search by keyword and filter by category or collection
+- Login page that sends customers into the product-picking experience
+- Product catalog with categories for dock hardware, electrical, anchoring, safety, steering, and deck gear
+- Search by keyword and filter by category or fitment
 - Search-term highlighting in catalog results for faster scanning
-- Product recommendations that react to the selected product and current cart
+- Product recommendations that react to the selected boat part and current cart
 - Sort products and inspect a highlighted detail view with availability and delivery info
 - Shopping cart with quantity controls, clear-cart action, coupon support, free-shipping threshold, and live totals
 - Fuller checkout summary with item counts, units, account/contact previews, coupon status, tax estimate, delivery tier, savings, and a breakdown of order costs
