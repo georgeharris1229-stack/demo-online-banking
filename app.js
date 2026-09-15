@@ -158,6 +158,7 @@ const products = [
 
 const FREE_SHIPPING_THRESHOLD = 150;
 const STANDARD_SHIPPING = 12.99;
+const ESTIMATED_TAX_RATE = 0.07;
 const coupons = {
     SAVE10: { type: "percent", value: 0.1, label: "10% off" },
     WELCOME5: { type: "fixed", value: 5, label: "$5 off" }
@@ -214,8 +215,16 @@ const detailStockNote = document.getElementById("detailStockNote");
 const shippingMessage = document.getElementById("shippingMessage");
 const shippingProgressBar = document.getElementById("shippingProgressBar");
 const summaryItemCount = document.getElementById("summaryItemCount");
+const summaryUnitCount = document.getElementById("summaryUnitCount");
+const summaryCoupon = document.getElementById("summaryCoupon");
 const summaryDelivery = document.getElementById("summaryDelivery");
+const summaryTax = document.getElementById("summaryTax");
 const summarySavings = document.getElementById("summarySavings");
+const breakdownSubtotal = document.getElementById("breakdownSubtotal");
+const breakdownDiscount = document.getElementById("breakdownDiscount");
+const breakdownShipping = document.getElementById("breakdownShipping");
+const breakdownTax = document.getElementById("breakdownTax");
+const breakdownEta = document.getElementById("breakdownEta");
 const couponInput = document.getElementById("couponInput");
 const applyCouponButton = document.getElementById("applyCouponButton");
 const removeCouponButton = document.getElementById("removeCouponButton");
@@ -495,6 +504,26 @@ function clampQuantity(product, quantity) {
     return Math.min(quantity, product.stock);
 }
 
+function deliveryEstimate(entries) {
+    if (!entries.length) {
+        return "—";
+    }
+
+    const productsInCart = entries
+        .map(([productId]) => productsById.get(productId))
+        .filter(Boolean);
+
+    if (productsInCart.some((product) => product.inventory === "Special order")) {
+        return "5-7 business days";
+    }
+
+    if (productsInCart.some((product) => product.inventory === "Low stock")) {
+        return "2-3 business days";
+    }
+
+    return "1-2 business days";
+}
+
 function productCard(product) {
     const term = searchInput.value.trim();
     const badge = product.badge
@@ -632,6 +661,7 @@ function renderCart() {
 
     const entries = [...cart.entries()];
     const count = entries.reduce((sum, [, quantity]) => sum + quantity, 0);
+    const distinctItems = entries.length;
     const subtotal = entries.reduce((sum, [productId, quantity]) => {
         const product = productsById.get(productId);
         return sum + (product ? product.price * quantity : 0);
@@ -639,28 +669,38 @@ function renderCart() {
     const discount = discountAmount(subtotal);
     const discountedSubtotal = subtotal - discount;
     const freight = discountedSubtotal > 0 ? (discountedSubtotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING) : 0;
+    const tax = discountedSubtotal > 0 ? Number((discountedSubtotal * ESTIMATED_TAX_RATE).toFixed(2)) : 0;
     const freeShippingGap = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
     const shippingProgress = subtotal <= 0
         ? 0
         : Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
     const shippingSavings = discountedSubtotal >= FREE_SHIPPING_THRESHOLD ? STANDARD_SHIPPING : 0;
     const savings = shippingSavings + discount;
+    const coupon = activeCoupon();
 
     cartCount.textContent = `${count} item${count === 1 ? "" : "s"}`;
     cartSubtotal.textContent = currency(subtotal);
     shippingEstimate.textContent = freight === 0 && subtotal > 0 ? "Free" : currency(freight);
-    cartTotal.textContent = currency(discountedSubtotal + freight);
+    cartTotal.textContent = currency(discountedSubtotal + freight + tax);
     shippingMessage.textContent = subtotal > 0 && freeShippingGap === 0
         ? "You unlocked free shipping."
         : `Add ${currency(freeShippingGap || FREE_SHIPPING_THRESHOLD)} to unlock free shipping.`;
     shippingProgressBar.style.width = `${shippingProgress}%`;
-    summaryItemCount.textContent = String(count);
+    summaryItemCount.textContent = String(distinctItems);
+    summaryUnitCount.textContent = String(count);
+    summaryCoupon.textContent = coupon ? `${activeCouponCode} · ${coupon.label}` : "No coupon";
     summaryDelivery.textContent = discountedSubtotal >= FREE_SHIPPING_THRESHOLD
         ? "Free standard shipping"
         : count > 0
             ? "Standard shipping"
             : "Standard shipping";
+    summaryTax.textContent = currency(tax);
     summarySavings.textContent = savings > 0 ? currency(savings) : "$0.00";
+    breakdownSubtotal.textContent = currency(subtotal);
+    breakdownDiscount.textContent = `-${currency(discount)}`;
+    breakdownShipping.textContent = freight === 0 && subtotal > 0 ? "Free" : currency(freight);
+    breakdownTax.textContent = currency(tax);
+    breakdownEta.textContent = deliveryEstimate(entries);
     clearCartButton.disabled = !entries.length;
     removeCouponButton.disabled = !activeCouponCode;
     applyCouponButton.disabled = !couponInput.value.trim();
