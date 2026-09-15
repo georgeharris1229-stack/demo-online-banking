@@ -3,194 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RedBank - Online Banking Demo</title>
+    <title>Harbor & Steel Supply</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="app">
-        <!-- Login Page -->
-        <div id="loginPage" class="page active">
-            <div class="login-container">
-                <div class="login-card">
-                    <div class="bank-logo">🏦</div>
-                    <h1>RedBank</h1>
-                    <p class="tagline">Your Trusted Online Banking Partner</p>
-                    
-                    <form id="loginForm">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" id="username" placeholder="Enter username" required>
+    <div class="site-shell">
+        <header class="hero">
+            <nav class="navbar">
+                <div class="brand">
+                    <span class="brand-mark">⚓</span>
+                    <div>
+                        <p class="eyebrow">Marine hardware & industrial stock</p>
+                        <h1>Harbor & Steel Supply</h1>
+                    </div>
+                </div>
+                <div class="nav-actions">
+                    <a href="#catalog">Catalog</a>
+                    <a href="#materials">Material Guide</a>
+                    <a href="#cartPanel">Quote Cart</a>
+                </div>
+            </nav>
+
+            <div class="hero-content">
+                <div>
+                    <p class="eyebrow">Boat parts + structural materials in one order</p>
+                    <h2>Shop marine essentials, sheet steel, and heavy-duty construction supplies.</h2>
+                    <p class="hero-copy">
+                        Browse corrosion-resistant boat parts, dock hardware, and steel stock with
+                        multiple thickness options for fabrication and building projects.
+                    </p>
+                    <div class="hero-metrics">
+                        <div>
+                            <strong>150+</strong>
+                            <span>marine and jobsite products</span>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" id="password" placeholder="Enter password" required>
+                        <div>
+                            <strong>6</strong>
+                            <span>steel thickness options</span>
                         </div>
-                        
-                        <button type="submit" class="btn-primary">Login</button>
-                        
-                        <p class="demo-hint">Demo: username: demo | password: demo123</p>
+                        <div>
+                            <strong>24h</strong>
+                            <span>quote turnaround</span>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="hero-card">
+                    <p class="eyebrow">Popular build bundle</p>
+                    <h3>Dock Repair Starter Loadout</h3>
+                    <ul>
+                        <li>316 stainless cleats</li>
+                        <li>Galvanized fastener kit</li>
+                        <li>3/16&quot; steel plate sheets</li>
+                        <li>Protective primer and sealant</li>
+                    </ul>
+                    <button class="btn-primary" id="bundleButton" type="button">Add bundle to cart</button>
+                </aside>
+            </div>
+        </header>
+
+        <main>
+            <section class="filters-section" id="catalog">
+                <div>
+                    <p class="eyebrow">Product catalog</p>
+                    <h2>Find the right part or material</h2>
+                </div>
+
+                <div class="filters-grid">
+                    <label class="filter-control">
+                        <span>Search</span>
+                        <input type="search" id="searchInput" placeholder="Search by product, use, or material">
+                    </label>
+
+                    <label class="filter-control">
+                        <span>Category</span>
+                        <select id="categoryFilter">
+                            <option value="all">All categories</option>
+                        </select>
+                    </label>
+
+                    <label class="filter-control">
+                        <span>Steel thickness</span>
+                        <select id="thicknessFilter">
+                            <option value="all">All thicknesses</option>
+                        </select>
+                    </label>
+                </div>
+            </section>
+
+            <section class="content-grid">
+                <section class="catalog-panel">
+                    <div class="catalog-header">
+                        <p id="resultsCount">0 products</p>
+                        <button class="btn-secondary" id="clearFiltersButton" type="button">Clear filters</button>
+                    </div>
+                    <div id="productGrid" class="product-grid"></div>
+                </section>
+
+                <aside class="cart-panel" id="cartPanel">
+                    <div class="cart-header">
+                        <div>
+                            <p class="eyebrow">Quote cart</p>
+                            <h2>Current order</h2>
+                        </div>
+                        <span class="cart-badge" id="cartCount">0 items</span>
+                    </div>
+
+                    <div id="cartItems" class="cart-items"></div>
+
+                    <div class="cart-summary">
+                        <div>
+                            <span>Subtotal</span>
+                            <strong id="cartSubtotal">$0.00</strong>
+                        </div>
+                        <div>
+                            <span>Estimated freight</span>
+                            <strong id="shippingEstimate">$0.00</strong>
+                        </div>
+                        <div class="cart-total">
+                            <span>Estimated total</span>
+                            <strong id="cartTotal">$0.00</strong>
+                        </div>
+                    </div>
+
+                    <form id="quoteForm" class="quote-form">
+                        <h3>Request pricing</h3>
+                        <label class="filter-control">
+                            <span>Name</span>
+                            <input type="text" id="customerName" placeholder="Project buyer name" required>
+                        </label>
+                        <label class="filter-control">
+                            <span>Email</span>
+                            <input type="email" id="customerEmail" placeholder="you@example.com" required>
+                        </label>
+                        <label class="filter-control">
+                            <span>Project notes</span>
+                            <textarea id="projectNotes" rows="4" placeholder="Tell us about delivery needs, cuts, coatings, or boat model fitment"></textarea>
+                        </label>
+                        <button class="btn-primary" type="submit">Submit quote request</button>
                     </form>
-                </div>
-            </div>
-        </div>
 
-        <!-- Dashboard Page -->
-        <div id="dashboardPage" class="page">
-            <nav class="navbar">
-                <div class="navbar-brand">🏦 RedBank</div>
-                <div class="navbar-menu">
-                    <a href="#" onclick="showPage('dashboardPage')" class="nav-link active">Dashboard</a>
-                    <a href="#" onclick="showPage('transferPage')" class="nav-link">Transfer</a>
-                    <a href="#" onclick="showPage('historyPage')" class="nav-link">History</a>
-                    <button onclick="logout()" class="btn-logout">Logout</button>
-                </div>
-            </nav>
+                    <div id="quoteMessage" class="quote-message" aria-live="polite"></div>
+                </aside>
+            </section>
 
-            <div class="dashboard-container">
-                <div class="welcome-section">
-                    <h1>Welcome, <span id="userName">User</span>!</h1>
-                    <p>Manage your finances with ease</p>
+            <section class="materials-section" id="materials">
+                <div class="section-heading">
+                    <p class="eyebrow">Material guide</p>
+                    <h2>Steel thickness options for marine and construction work</h2>
                 </div>
 
-                <div class="accounts-grid">
-                    <div class="account-card">
-                        <div class="account-header">
-                            <h3>Checking Account</h3>
-                            <span class="account-type">Primary</span>
-                        </div>
-                        <div class="account-number">•••• •••• •••• 1234</div>
-                        <div class="balance-section">
-                            <p class="balance-label">Current Balance</p>
-                            <p class="balance-amount" id="checkingBalance">$5,250.00</p>
-                        </div>
-                    </div>
-
-                    <div class="account-card">
-                        <div class="account-header">
-                            <h3>Savings Account</h3>
-                            <span class="account-type">Secondary</span>
-                        </div>
-                        <div class="account-number">•••• •••• •••• 5678</div>
-                        <div class="balance-section">
-                            <p class="balance-label">Current Balance</p>
-                            <p class="balance-amount" id="savingsBalance">$12,500.00</p>
-                        </div>
-                    </div>
+                <div class="materials-grid">
+                    <article>
+                        <h3>1/8&quot; plate</h3>
+                        <p>Common for brackets, mounting tabs, deck reinforcement, and light patch panels.</p>
+                    </article>
+                    <article>
+                        <h3>3/16&quot; plate</h3>
+                        <p>Balanced option for trailer repairs, dock framing gussets, and general fabrication.</p>
+                    </article>
+                    <article>
+                        <h3>1/4&quot; plate</h3>
+                        <p>Good fit for structural base plates, bollards, heavy equipment supports, and ramps.</p>
+                    </article>
+                    <article>
+                        <h3>3/8&quot; plate</h3>
+                        <p>Selected for higher-load applications including seawall braces and skid-resistant platforms.</p>
+                    </article>
                 </div>
-
-                <div class="quick-actions">
-                    <h2>Quick Actions</h2>
-                    <div class="actions-grid">
-                        <button onclick="showPage('transferPage')" class="action-btn">
-                            <span class="action-icon">💸</span>
-                            <span>Transfer Money</span>
-                        </button>
-                        <button class="action-btn">
-                            <span class="action-icon">📱</span>
-                            <span>Pay Bills</span>
-                        </button>
-                        <button class="action-btn">
-                            <span class="action-icon">💳</span>
-                            <span>Request Card</span>
-                        </button>
-                        <button onclick="showPage('historyPage')" class="action-btn">
-                            <span class="action-icon">📋</span>
-                            <span>View History</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="recent-transactions">
-                    <h2>Recent Transactions</h2>
-                    <div id="recentTxns" class="transaction-list">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Transfer Page -->
-        <div id="transferPage" class="page">
-            <nav class="navbar">
-                <div class="navbar-brand">🏦 RedBank</div>
-                <div class="navbar-menu">
-                    <a href="#" onclick="showPage('dashboardPage')" class="nav-link">Dashboard</a>
-                    <a href="#" onclick="showPage('transferPage')" class="nav-link active">Transfer</a>
-                    <a href="#" onclick="showPage('historyPage')" class="nav-link">History</a>
-                    <button onclick="logout()" class="btn-logout">Logout</button>
-                </div>
-            </nav>
-
-            <div class="transfer-container">
-                <div class="transfer-card">
-                    <h1>Transfer Money</h1>
-                    
-                    <form id="transferForm">
-                        <div class="form-group">
-                            <label for="fromAccount">From Account</label>
-                            <select id="fromAccount" required>
-                                <option value="">Select account</option>
-                                <option value="checking">Checking (•••• 1234)</option>
-                                <option value="savings">Savings (•••• 5678)</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="toAccount">To Account</label>
-                            <select id="toAccount" required>
-                                <option value="">Select account</option>
-                                <option value="checking">Checking (•••• 1234)</option>
-                                <option value="savings">Savings (•••• 5678)</option>
-                                <option value="external">External Account</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="amount">Amount ($)</label>
-                            <input type="number" id="amount" placeholder="0.00" min="0" step="0.01" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <input type="text" id="description" placeholder="Add a note (optional)">
-                        </div>
-
-                        <button type="submit" class="btn-primary">Transfer Now</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- History Page -->
-        <div id="historyPage" class="page">
-            <nav class="navbar">
-                <div class="navbar-brand">🏦 RedBank</div>
-                <div class="navbar-menu">
-                    <a href="#" onclick="showPage('dashboardPage')" class="nav-link">Dashboard</a>
-                    <a href="#" onclick="showPage('transferPage')" class="nav-link">Transfer</a>
-                    <a href="#" onclick="showPage('historyPage')" class="nav-link active">History</a>
-                    <button onclick="logout()" class="btn-logout">Logout</button>
-                </div>
-            </nav>
-
-            <div class="history-container">
-                <h1>Transaction History</h1>
-                
-                <div class="filter-section">
-                    <select id="historyFilter">
-                        <option value="all">All Transactions</option>
-                        <option value="deposit">Deposits Only</option>
-                        <option value="withdrawal">Withdrawals Only</option>
-                        <option value="transfer">Transfers Only</option>
-                    </select>
-                </div>
-
-                <div id="transactionHistory" class="transaction-list full-history">
-                    <!-- Will be populated by JavaScript -->
-                </div>
-            </div>
-        </div>
+            </section>
+        </main>
     </div>
 
     <script src="app.js"></script>
