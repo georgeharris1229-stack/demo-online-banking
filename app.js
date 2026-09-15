@@ -155,7 +155,15 @@ function uniqueValues(key) {
 }
 
 function thicknessSortValue(thickness) {
-    const numeric = parseFloat(thickness);
+    const normalized = thickness.replace(/"/g, "").trim();
+    if (normalized.includes("/")) {
+        const [numerator, denominator] = normalized.split("/").map(Number);
+        if (!Number.isNaN(numerator) && !Number.isNaN(denominator) && denominator !== 0) {
+            return numerator / denominator;
+        }
+    }
+
+    const numeric = Number(normalized);
     return Number.isNaN(numeric) ? Number.MAX_SAFE_INTEGER : numeric;
 }
 
@@ -246,6 +254,10 @@ function renderProducts() {
 }
 
 function addToCart(productId, quantity = 1) {
+    if (!productsById.has(productId) || quantity <= 0) {
+        return;
+    }
+
     const currentQuantity = cart.get(productId) || 0;
     cart.set(productId, currentQuantity + quantity);
     clearQuoteMessage();
@@ -253,6 +265,12 @@ function addToCart(productId, quantity = 1) {
 }
 
 function updateCartQuantity(productId, nextQuantity) {
+    if (!productsById.has(productId)) {
+        cart.delete(productId);
+        renderCart();
+        return;
+    }
+
     if (nextQuantity <= 0) {
         cart.delete(productId);
     } else {
