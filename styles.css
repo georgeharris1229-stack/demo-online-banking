@@ -265,6 +265,21 @@ textarea {
     line-height: 1.6;
 }
 
+.stock-note,
+.detail-stock-note {
+    color: var(--accent-dark);
+    font-weight: 700;
+}
+
+.stock-note {
+    margin: 12px 0 0;
+    font-size: 0.92rem;
+}
+
+.detail-stock-note {
+    margin: 10px 0 0;
+}
+
 mark {
     background: #fff1a8;
     color: inherit;
@@ -475,6 +490,12 @@ mark {
     background: #edf2f7;
     color: var(--text);
     font-size: 1rem;
+}
+
+.qty-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    transform: none;
 }
 
 .cart-summary {

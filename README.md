@@ -11,6 +11,7 @@ Static shopping app demo for browsing curated lifestyle products, adding items t
 - Shopping cart with quantity controls, clear-cart action, coupon support, free-shipping threshold, and live totals
 - Checkout summary cards for item count, delivery tier, and shipping savings
 - Wishlist with saved items and move-to-cart actions
+- Stock-aware product messaging and quantity caps in the cart
 - Cart, filters, and selected product persisted in local browser storage between reloads
 - Demo checkout form with instant order confirmation
 

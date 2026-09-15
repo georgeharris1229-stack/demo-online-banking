@@ -7,6 +7,7 @@ const products = [
         badge: "Best seller",
         price: 129.99,
         unit: "each",
+        stock: 12,
         material: "Soft-touch plastic & memory foam",
         description: "Noise-isolating headphones with 30-hour battery life and quick pairing.",
         inventory: "In stock",
@@ -22,6 +23,7 @@ const products = [
         badge: "Editor pick",
         price: 68.5,
         unit: "each",
+        stock: 18,
         material: "Aluminum",
         description: "Adjustable LED task lamp with touch controls and warm-to-cool light modes.",
         inventory: "In stock",
@@ -37,6 +39,7 @@ const products = [
         badge: "Trending",
         price: 32.0,
         unit: "each",
+        stock: 4,
         material: "Stainless steel",
         description: "Double-wall bottle that keeps drinks cold for 24 hours or hot for 12.",
         inventory: "Low stock",
@@ -51,6 +54,7 @@ const products = [
         thickness: "Reset",
         price: 44.25,
         unit: "each",
+        stock: 10,
         material: "Ceramic & BPA-free reservoir",
         description: "Ultrasonic diffuser with ambient light settings and automatic shutoff.",
         inventory: "In stock",
@@ -66,6 +70,7 @@ const products = [
         badge: "New",
         price: 58.0,
         unit: "each",
+        stock: 9,
         material: "Recycled polyester knit",
         description: "Soft oversized blanket designed for couches, reading nooks, and guest rooms.",
         inventory: "In stock",
@@ -80,6 +85,7 @@ const products = [
         thickness: "Reset",
         price: 88.0,
         unit: "each",
+        stock: 15,
         material: "Mesh fabric & silicone",
         description: "Compact waterproof speaker with rich bass and 14-hour playback.",
         inventory: "In stock",
@@ -94,6 +100,7 @@ const products = [
         thickness: "Focus",
         price: 24.5,
         unit: "set",
+        stock: 3,
         material: "Recycled paper",
         description: "Minimal desk planner with habit tracker, sticky tabs, and goal sheets.",
         inventory: "Low stock",
@@ -108,6 +115,7 @@ const products = [
         thickness: "Cozy",
         price: 27.75,
         unit: "each",
+        stock: 11,
         material: "Organic cotton canvas",
         description: "Structured everyday tote with interior pocket and reinforced straps.",
         inventory: "In stock",
@@ -123,6 +131,7 @@ const products = [
         badge: "Premium",
         price: 149.0,
         unit: "each",
+        stock: 2,
         material: "Engineered wood & steel",
         description: "Adjustable desktop riser for switching between sitting and standing.",
         inventory: "Special order",
@@ -137,6 +146,7 @@ const products = [
         thickness: "Reset",
         price: 39.99,
         unit: "each",
+        stock: 7,
         material: "Non-slip natural rubber",
         description: "Supportive mat with alignment lines for stretching, yoga, and mobility sessions.",
         inventory: "In stock",
@@ -200,6 +210,7 @@ const detailInventory = document.getElementById("detailInventory");
 const detailLeadTime = document.getElementById("detailLeadTime");
 const detailApplications = document.getElementById("detailApplications");
 const detailAddButton = document.getElementById("detailAddButton");
+const detailStockNote = document.getElementById("detailStockNote");
 const shippingMessage = document.getElementById("shippingMessage");
 const shippingProgressBar = document.getElementById("shippingProgressBar");
 const summaryItemCount = document.getElementById("summaryItemCount");
@@ -468,6 +479,22 @@ function highlightMatch(value, term) {
     return safeValue.replace(pattern, "<mark>$1</mark>");
 }
 
+function stockMessage(product) {
+    if (product.inventory === "Special order") {
+        return `Limited run • ${product.stock} reserved for quick ship`;
+    }
+
+    if (product.inventory === "Low stock") {
+        return `Only ${product.stock} left in stock`;
+    }
+
+    return `${product.stock} ready to ship`;
+}
+
+function clampQuantity(product, quantity) {
+    return Math.min(quantity, product.stock);
+}
+
 function productCard(product) {
     const term = searchInput.value.trim();
     const badge = product.badge
@@ -493,6 +520,7 @@ function productCard(product) {
                 <span class="inventory-pill ${inventoryClass(product.inventory)}">${escapeHtml(product.inventory)}</span>
                 <span class="lead-time">${escapeHtml(product.leadTime)}</span>
             </div>
+            <p class="stock-note">${escapeHtml(stockMessage(product))}</p>
             <dl class="product-meta">
                 <div>
                     <dt>Material</dt>
@@ -527,6 +555,7 @@ function renderProductDetail(productId = selectedProductId) {
     detailThickness.textContent = product.thickness;
     detailInventory.textContent = product.inventory;
     detailLeadTime.textContent = product.leadTime;
+    detailStockNote.textContent = stockMessage(product);
     detailApplications.innerHTML = product.applications
         .map((application) => `<li>${escapeHtml(application)}</li>`)
         .join("");
@@ -555,30 +584,42 @@ function renderProducts() {
 }
 
 function addToCart(productId, quantity = 1) {
-    if (!productsById.has(productId) || quantity <= 0) {
+    const product = productsById.get(productId);
+    if (!product || quantity <= 0) {
         return;
     }
 
     const currentQuantity = cart.get(productId) || 0;
-    cart.set(productId, currentQuantity + quantity);
+    const nextQuantity = clampQuantity(product, currentQuantity + quantity);
+    if (nextQuantity === currentQuantity) {
+        setQuoteMessage(`Only ${product.stock} ${product.unit}${product.stock === 1 ? "" : "s"} available for ${product.name}.`, "error");
+        return;
+    }
+
+    cart.set(productId, nextQuantity);
     clearQuoteMessage();
     renderCart();
 }
 
 function updateCartQuantity(productId, nextQuantity) {
-    if (!productsById.has(productId)) {
+    const product = productsById.get(productId);
+    if (!product) {
         cart.delete(productId);
         clearQuoteMessage();
         renderCart();
         return;
     }
 
+    clearQuoteMessage();
     if (nextQuantity <= 0) {
         cart.delete(productId);
     } else {
-        cart.set(productId, nextQuantity);
+        const cappedQuantity = clampQuantity(product, nextQuantity);
+        if (cappedQuantity < nextQuantity) {
+            setQuoteMessage(`Cart quantity capped at ${product.stock} for ${product.name}.`, "error");
+        }
+        cart.set(productId, cappedQuantity);
     }
-    clearQuoteMessage();
     renderCart();
 }
 
@@ -647,7 +688,7 @@ function renderCart() {
                 <div class="cart-item-controls">
                     <button class="qty-button" type="button" aria-label="Decrease quantity of ${escapeHtml(product.name)}" data-action="decrease" data-product-id="${escapeHtml(productId)}">−</button>
                     <span role="status" aria-live="polite">Qty: ${quantity}</span>
-                    <button class="qty-button" type="button" aria-label="Increase quantity of ${escapeHtml(product.name)}" data-action="increase" data-product-id="${escapeHtml(productId)}">+</button>
+                    <button class="qty-button" type="button" aria-label="Increase quantity of ${escapeHtml(product.name)}" data-action="increase" data-product-id="${escapeHtml(productId)}"${quantity >= product.stock ? " disabled" : ""}>+</button>
                     <strong>${currency(product.price * quantity)}</strong>
                 </div>
             </article>
@@ -670,12 +711,10 @@ function renderCart() {
 }
 
 function addBundle() {
-    cart.set("wireless-headphones", (cart.get("wireless-headphones") || 0) + 1);
-    cart.set("smart-desk-lamp", (cart.get("smart-desk-lamp") || 0) + 1);
-    cart.set("insulated-bottle", (cart.get("insulated-bottle") || 0) + 1);
-    cart.set("aroma-diffuser", (cart.get("aroma-diffuser") || 0) + 1);
-    clearQuoteMessage();
-    renderCart();
+    addToCart("wireless-headphones", 1);
+    addToCart("smart-desk-lamp", 1);
+    addToCart("insulated-bottle", 1);
+    addToCart("aroma-diffuser", 1);
 }
 
 function handleProductGridClick(event) {
