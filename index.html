@@ -21,6 +21,8 @@
                     <a href="#catalog">Catalog</a>
                     <a href="#materials">Why shop</a>
                     <a href="#cartPanel">Cart</a>
+                    <a href="/login.html" id="accountLink">Login</a>
+                    <span class="account-chip" id="accountStatusChip">Guest</span>
                 </div>
             </nav>
 
@@ -173,6 +175,25 @@
                         </div>
                     </div>
 
+                    <div class="customer-summary" aria-live="polite">
+                        <div>
+                            <span>Account</span>
+                            <strong id="summaryAccount">Guest checkout</strong>
+                        </div>
+                        <div>
+                            <span>Contact</span>
+                            <strong id="summaryContact">Add your email</strong>
+                        </div>
+                        <div>
+                            <span>Ship to</span>
+                            <strong id="summaryAddress">Add a shipping address</strong>
+                        </div>
+                        <div>
+                            <span>Payment</span>
+                            <strong id="summaryPayment">Card ending in 4242</strong>
+                        </div>
+                    </div>
+
                     <div class="checkout-breakdown" aria-live="polite">
                         <div>
                             <span>Merchandise</span>
@@ -231,6 +252,14 @@
                         <label class="filter-control">
                             <span>Shipping address</span>
                             <textarea id="projectNotes" rows="4" placeholder="Street, city, state, and delivery notes" required></textarea>
+                        </label>
+                        <label class="filter-control">
+                            <span>Payment method</span>
+                            <select id="paymentMethod">
+                                <option value="Card ending in 4242">Card ending in 4242</option>
+                                <option value="PayPal">PayPal</option>
+                                <option value="Apple Pay">Apple Pay</option>
+                            </select>
                         </label>
                         <button class="btn-primary" type="submit">Place order</button>
                     </form>

@@ -9,10 +9,11 @@ Static shopping app demo for browsing curated lifestyle products, adding items t
 - Search-term highlighting in catalog results for faster scanning
 - Sort products and inspect a highlighted detail view with availability and delivery info
 - Shopping cart with quantity controls, clear-cart action, coupon support, free-shipping threshold, and live totals
-- Fuller checkout summary with item counts, coupon status, tax estimate, delivery tier, savings, and a breakdown of order costs
+- Fuller checkout summary with item counts, units, account/contact previews, coupon status, tax estimate, delivery tier, savings, and a breakdown of order costs
 - Wishlist with saved items and move-to-cart actions
 - Stock-aware product messaging and quantity caps in the cart
 - Cart, filters, and selected product persisted in local browser storage between reloads
+- Standalone login page that stores a demo signed-in account for checkout
 - Demo checkout form with instant order confirmation
 
 ## Run locally

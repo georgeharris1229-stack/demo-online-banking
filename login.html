@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LumaCart Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="site-shell">
+        <header class="hero">
+            <nav class="navbar">
+                <div class="brand">
+                    <span class="brand-mark">🛍️</span>
+                    <div>
+                        <p class="eyebrow">Sign in to speed up checkout</p>
+                        <h1>LumaCart Account</h1>
+                    </div>
+                </div>
+                <div class="nav-actions">
+                    <a href="/index.html">Store</a>
+                    <span class="account-chip" id="loginAccountStatus">Guest</span>
+                </div>
+            </nav>
+        </header>
+
+        <main class="auth-main">
+            <section class="auth-layout">
+                <section class="auth-panel">
+                    <p class="eyebrow">Login page</p>
+                    <h2>Access your saved shopping details</h2>
+                    <p class="summary-note">Use this demo sign-in form to restore your account across the storefront and checkout summary.</p>
+
+                    <form id="loginForm" class="auth-form">
+                        <label class="filter-control">
+                            <span>Name</span>
+                            <input type="text" id="loginName" placeholder="Your name">
+                        </label>
+                        <label class="filter-control">
+                            <span>Email</span>
+                            <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                        </label>
+                        <label class="filter-control">
+                            <span>Password</span>
+                            <input type="password" id="loginPassword" placeholder="Enter password" required>
+                        </label>
+                        <div class="auth-actions">
+                            <button class="btn-primary" type="submit">Sign in</button>
+                            <a class="btn-secondary" href="/index.html">Back to store</a>
+                        </div>
+                    </form>
+
+                    <p id="loginMessage" class="auth-message" aria-live="polite"></p>
+                </section>
+
+                <aside class="auth-aside">
+                    <p class="eyebrow">Account snapshot</p>
+                    <h2>Current session</h2>
+                    <div class="account-card">
+                        <h3 id="sessionName">Guest shopper</h3>
+                        <p id="sessionEmail">No email saved</p>
+                        <p id="sessionStatus">Sign in to link checkout details to your account.</p>
+                        <div class="account-card-actions">
+                            <button class="btn-secondary" id="logoutButton" type="button">Sign out</button>
+                            <a class="btn-primary" href="/index.html">Continue shopping</a>
+                        </div>
+                    </div>
+                </aside>
+            </section>
+        </main>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>

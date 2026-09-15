@@ -175,7 +175,8 @@ const storageKeys = {
     filters: "lumacart-filters",
     selectedProductId: "lumacart-selected-product",
     wishlist: "lumacart-wishlist",
-    coupon: "lumacart-coupon"
+    coupon: "lumacart-coupon",
+    user: "lumacart-user"
 };
 
 const cart = new Map();
@@ -183,6 +184,7 @@ const wishlist = new Set();
 const productsById = new Map(products.map((product) => [product.id, product]));
 let selectedProductId = products[0].id;
 let activeCouponCode = "";
+let currentUser = null;
 
 const productGrid = document.getElementById("productGrid");
 const resultsCount = document.getElementById("resultsCount");
@@ -192,6 +194,8 @@ const cartSubtotal = document.getElementById("cartSubtotal");
 const shippingEstimate = document.getElementById("shippingEstimate");
 const cartTotal = document.getElementById("cartTotal");
 const quoteMessage = document.getElementById("quoteMessage");
+const accountLink = document.getElementById("accountLink");
+const accountStatusChip = document.getElementById("accountStatusChip");
 const categoryFilter = document.getElementById("categoryFilter");
 const thicknessFilter = document.getElementById("thicknessFilter");
 const sortFilter = document.getElementById("sortFilter");
@@ -220,6 +224,10 @@ const summaryCoupon = document.getElementById("summaryCoupon");
 const summaryDelivery = document.getElementById("summaryDelivery");
 const summaryTax = document.getElementById("summaryTax");
 const summarySavings = document.getElementById("summarySavings");
+const summaryAccount = document.getElementById("summaryAccount");
+const summaryContact = document.getElementById("summaryContact");
+const summaryAddress = document.getElementById("summaryAddress");
+const summaryPayment = document.getElementById("summaryPayment");
 const breakdownSubtotal = document.getElementById("breakdownSubtotal");
 const breakdownDiscount = document.getElementById("breakdownDiscount");
 const breakdownShipping = document.getElementById("breakdownShipping");
@@ -231,6 +239,10 @@ const removeCouponButton = document.getElementById("removeCouponButton");
 const couponMessage = document.getElementById("couponMessage");
 const wishlistCount = document.getElementById("wishlistCount");
 const wishlistItems = document.getElementById("wishlistItems");
+const customerNameInput = document.getElementById("customerName");
+const customerEmailInput = document.getElementById("customerEmail");
+const shippingAddressInput = document.getElementById("projectNotes");
+const paymentMethodInput = document.getElementById("paymentMethod");
 
 function currency(value) {
     return new Intl.NumberFormat("en-US", {
@@ -295,6 +307,24 @@ function writeStoredJson(key, value) {
 function removeStoredValue(key) {
     if (!storage) {
         return;
+    }
+
+    function loadStoredUser() {
+        const storedUser = readStoredJson(storageKeys.user);
+        if (!storedUser || typeof storedUser !== "object") {
+            return;
+        }
+
+        const name = sanitizePlainText(storedUser.name || "");
+        const email = String(storedUser.email || "").trim();
+        if (!email) {
+            return;
+        }
+
+        currentUser = {
+            name: name || email.split("@")[0],
+            email
+        };
     }
 
     storage.removeItem(key);
@@ -524,6 +554,47 @@ function deliveryEstimate(entries) {
     return "1-2 business days";
 }
 
+function renderAccountStatus() {
+    const label = currentUser ? `Hi, ${currentUser.name}` : "Guest";
+    accountStatusChip.textContent = label;
+    accountLink.textContent = currentUser ? "Account" : "Login";
+}
+
+function shippingPreview() {
+    const value = sanitizePlainText(shippingAddressInput.value);
+    return value || "Add a shipping address";
+}
+
+function contactPreview() {
+    const name = sanitizePlainText(customerNameInput.value);
+    const email = customerEmailInput.value.trim();
+
+    if (name && email) {
+        return `${name} · ${email}`;
+    }
+
+    if (email) {
+        return email;
+    }
+
+    if (currentUser?.email) {
+        return currentUser.email;
+    }
+
+    return "Add your email";
+}
+
+function paymentPreview() {
+    return paymentMethodInput.value || "Card ending in 4242";
+}
+
+function renderCheckoutContext() {
+    summaryAccount.textContent = currentUser ? `${currentUser.name} account` : "Guest checkout";
+    summaryContact.textContent = contactPreview();
+    summaryAddress.textContent = shippingPreview();
+    summaryPayment.textContent = paymentPreview();
+}
+
 function productCard(product) {
     const term = searchInput.value.trim();
     const badge = product.badge
@@ -701,6 +772,7 @@ function renderCart() {
     breakdownShipping.textContent = freight === 0 && subtotal > 0 ? "Free" : currency(freight);
     breakdownTax.textContent = currency(tax);
     breakdownEta.textContent = deliveryEstimate(entries);
+    renderCheckoutContext();
     clearCartButton.disabled = !entries.length;
     removeCouponButton.disabled = !activeCouponCode;
     applyCouponButton.disabled = !couponInput.value.trim();
@@ -920,27 +992,38 @@ function removeCoupon() {
 function handleQuoteSubmit(event) {
     event.preventDefault();
 
+    if (!currentUser) {
+        setQuoteMessage("Sign in from the login page before placing your order.", "error");
+        return;
+    }
+
     if (!cart.size) {
         setQuoteMessage("Add at least one product before placing your order.", "error");
         return;
     }
 
-    const customerName = sanitizePlainText(document.getElementById("customerName").value) || "customer";
-    const customerEmail = document.getElementById("customerEmail").value.trim();
+    const customerName = sanitizePlainText(customerNameInput.value) || currentUser.name || "customer";
+    const customerEmail = customerEmailInput.value.trim() || currentUser.email;
     setQuoteMessage(`Thanks, ${customerName}. Your order for ${cartCount.textContent} is confirmed, and a receipt will be sent to ${customerEmail}.`, "success");
     quoteForm.reset();
     cart.clear();
     activeCouponCode = "";
     removeStoredValue(storageKeys.coupon);
     clearCouponMessage();
+    customerNameInput.value = currentUser.name;
+    customerEmailInput.value = currentUser.email;
     renderCart();
 }
 
 populateFilters();
+loadStoredUser();
 loadStoredCart();
 loadStoredWishlist();
 loadStoredCoupon();
 loadStoredSelection();
+renderAccountStatus();
+customerNameInput.value = currentUser?.name || "";
+customerEmailInput.value = currentUser?.email || "";
 renderProducts();
 renderCart();
 renderProductDetail();
@@ -960,6 +1043,10 @@ couponInput.addEventListener("input", () => {
     clearCouponMessage();
     applyCouponButton.disabled = !couponInput.value.trim();
 });
+customerNameInput.addEventListener("input", renderCheckoutContext);
+customerEmailInput.addEventListener("input", renderCheckoutContext);
+shippingAddressInput.addEventListener("input", renderCheckoutContext);
+paymentMethodInput.addEventListener("change", renderCheckoutContext);
 quoteForm.addEventListener("submit", handleQuoteSubmit);
 bundleButton.addEventListener("click", addBundle);
 quoteForm.addEventListener("input", clearQuoteMessage);
