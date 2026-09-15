@@ -102,6 +102,7 @@ const products = [
 ];
 
 const cart = new Map();
+const productsById = new Map(products.map((product) => [product.id, product]));
 
 const productGrid = document.getElementById("productGrid");
 const resultsCount = document.getElementById("resultsCount");
@@ -153,6 +154,11 @@ function uniqueValues(key) {
     return [...new Set(products.map((product) => product[key]))];
 }
 
+function thicknessSortValue(thickness) {
+    const numeric = parseFloat(thickness);
+    return Number.isNaN(numeric) ? Number.MAX_SAFE_INTEGER : numeric;
+}
+
 function populateFilters() {
     uniqueValues("category").forEach((category) => {
         const option = document.createElement("option");
@@ -163,6 +169,7 @@ function populateFilters() {
 
     uniqueValues("thickness")
         .filter((value) => value !== "n/a")
+        .sort((left, right) => thicknessSortValue(left) - thicknessSortValue(right))
         .forEach((thickness) => {
             const option = document.createElement("option");
             option.value = thickness;
@@ -265,7 +272,7 @@ function renderCart() {
     const entries = [...cart.entries()];
     const count = entries.reduce((sum, [, quantity]) => sum + quantity, 0);
     const subtotal = entries.reduce((sum, [productId, quantity]) => {
-        const product = products.find((item) => item.id === productId);
+        const product = productsById.get(productId);
         return sum + (product ? product.price * quantity : 0);
     }, 0);
     const freight = subtotal > 0 ? Math.max(45, subtotal * 0.08) : 0;
@@ -286,7 +293,7 @@ function renderCart() {
     }
 
     cartItems.innerHTML = entries.map(([productId, quantity]) => {
-        const product = products.find((item) => item.id === productId);
+        const product = productsById.get(productId);
         return `
             <article class="cart-item">
                 <div>
@@ -294,9 +301,9 @@ function renderCart() {
                     <p>${escapeHtml(product.category)}${product.thickness !== "n/a" ? ` · ${escapeHtml(product.thickness)}` : ""}</p>
                 </div>
                 <div class="cart-item-controls">
-                    <button class="qty-button" type="button" data-action="decrease" data-product-id="${escapeHtml(productId)}">−</button>
-                    <span>${quantity}</span>
-                    <button class="qty-button" type="button" data-action="increase" data-product-id="${escapeHtml(productId)}">+</button>
+                    <button class="qty-button" type="button" aria-label="Decrease quantity of ${escapeHtml(product.name)}" data-action="decrease" data-product-id="${escapeHtml(productId)}">−</button>
+                    <span aria-label="Quantity of ${escapeHtml(product.name)}">${quantity}</span>
+                    <button class="qty-button" type="button" aria-label="Increase quantity of ${escapeHtml(product.name)}" data-action="increase" data-product-id="${escapeHtml(productId)}">+</button>
                     <strong>${currency(product.price * quantity)}</strong>
                 </div>
             </article>
@@ -354,7 +361,8 @@ function handleQuoteSubmit(event) {
     }
 
     const customerName = sanitizePlainText(document.getElementById("customerName").value) || "customer";
-    setQuoteMessage(`Thanks, ${customerName}. Your quote request was prepared with ${cartCount.textContent}. Our team will email pricing and delivery options shortly.`, "success");
+    const customerEmail = sanitizePlainText(document.getElementById("customerEmail").value);
+    setQuoteMessage(`Thanks, ${customerName}. Your quote request was prepared with ${cartCount.textContent}. Our team will follow up at ${customerEmail} with pricing and delivery options shortly.`, "success");
     quoteForm.reset();
 }
 
