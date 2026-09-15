@@ -1,14 +1,14 @@
-# Harbor & Steel Supply
+# LumaCart
 
-Static storefront demo for shopping boat parts and construction materials, including steel products with multiple thickness options.
+Static shopping app demo for browsing curated lifestyle products, adding items to a cart, and completing a lightweight checkout flow.
 
 ## Features
 
-- Product catalog for boat parts, steel stock, and construction materials
-- Search by keyword and filter by category or steel thickness
-- Sort products and inspect a highlighted detail view with availability and lead-time info
-- Quote cart with quantity controls and estimated freight
-- Quote request form for project pricing follow-up
+- Product catalog with categories for tech, home, wellness, and accessories
+- Search by keyword and filter by category or collection
+- Sort products and inspect a highlighted detail view with availability and delivery info
+- Shopping cart with quantity controls, free-shipping threshold, and live totals
+- Demo checkout form with instant order confirmation
 
 ## Run locally
 

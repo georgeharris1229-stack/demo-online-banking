@@ -1,143 +1,143 @@
 const products = [
     {
-        id: "anchor-kit",
-        name: "Deluxe Anchor Kit",
-        category: "Boat Parts",
-        thickness: "n/a",
-        price: 189.99,
-        unit: "kit",
-        material: "Galvanized steel",
-        description: "Anchor, chain, shackles, and line sized for center console and work boats.",
+        id: "wireless-headphones",
+        name: "Wireless Headphones",
+        category: "Tech",
+        thickness: "Focus",
+        price: 129.99,
+        unit: "each",
+        material: "Soft-touch plastic & memory foam",
+        description: "Noise-isolating headphones with 30-hour battery life and quick pairing.",
         inventory: "In stock",
-        leadTime: "Ships in 1-2 days",
-        icon: "⚓",
-        applications: ["Center console anchoring", "Dock tie-off backups", "Service boat retrofits"]
+        leadTime: "Delivers in 2 days",
+        icon: "🎧",
+        applications: ["Remote work", "Travel listening", "Workout playlists"]
     },
     {
-        id: "cleat-set",
-        name: "316 Stainless Cleat Set",
-        category: "Boat Parts",
-        thickness: "n/a",
-        price: 74.5,
-        unit: "pair",
-        material: "316 stainless steel",
-        description: "Corrosion-resistant dock and deck cleats for mooring upgrades.",
+        id: "smart-desk-lamp",
+        name: "Smart Desk Lamp",
+        category: "Home",
+        thickness: "Focus",
+        price: 68.5,
+        unit: "each",
+        material: "Aluminum",
+        description: "Adjustable LED task lamp with touch controls and warm-to-cool light modes.",
         inventory: "In stock",
         leadTime: "Ships today",
-        icon: "🪝",
-        applications: ["Dock edge upgrades", "Pontoon tie-down points", "Mooring cleat replacements"]
+        icon: "💡",
+        applications: ["Home office setup", "Bedside reading", "Study sessions"]
     },
     {
-        id: "bilge-pump",
-        name: "Automatic Bilge Pump",
-        category: "Boat Parts",
-        thickness: "n/a",
-        price: 96.0,
-        unit: "unit",
-        material: "Composite housing",
-        description: "1100 GPH pump with float switch for small craft and utility vessels.",
-        inventory: "Low stock",
-        leadTime: "Ships in 2-3 days",
-        icon: "🚤",
-        applications: ["Utility skiffs", "Tender bilge replacement", "Workboat water management"]
-    },
-    {
-        id: "marine-fasteners",
-        name: "Marine Fastener Assortment",
-        category: "Boat Parts",
-        thickness: "n/a",
-        price: 58.25,
-        unit: "box",
+        id: "insulated-bottle",
+        name: "Insulated Water Bottle",
+        category: "Wellness",
+        thickness: "Reset",
+        price: 32.0,
+        unit: "each",
         material: "Stainless steel",
-        description: "Mixed screws, bolts, washers, and lock nuts for hardware replacements.",
+        description: "Double-wall bottle that keeps drinks cold for 24 hours or hot for 12.",
+        inventory: "Low stock",
+        leadTime: "Delivers in 3 days",
+        icon: "🧴",
+        applications: ["Gym sessions", "Commutes", "Desk hydration"]
+    },
+    {
+        id: "aroma-diffuser",
+        name: "Aromatherapy Diffuser",
+        category: "Wellness",
+        thickness: "Reset",
+        price: 44.25,
+        unit: "each",
+        material: "Ceramic & BPA-free reservoir",
+        description: "Ultrasonic diffuser with ambient light settings and automatic shutoff.",
         inventory: "In stock",
         leadTime: "Ships today",
-        icon: "🔩",
-        applications: ["Console refits", "Hatch hardware swaps", "Dock hardware service kits"]
+        icon: "🌿",
+        applications: ["Evening wind-down", "Bedroom comfort", "Yoga spaces"]
     },
     {
-        id: "sheet-plate-18",
-        name: "Mild Steel Plate",
-        category: "Steel",
-        thickness: "1/8\"",
-        price: 84.0,
-        unit: "sheet",
-        material: "A36 steel",
-        description: "4x8 structural plate for brackets, patch work, and general fabrication.",
+        id: "throw-blanket",
+        name: "Chunky Knit Throw Blanket",
+        category: "Home",
+        thickness: "Cozy",
+        price: 58.0,
+        unit: "each",
+        material: "Recycled polyester knit",
+        description: "Soft oversized blanket designed for couches, reading nooks, and guest rooms.",
         inventory: "In stock",
-        leadTime: "Warehouse pickup today",
-        icon: "🧱",
-        applications: ["Patch panels", "Mounting brackets", "Light fabrication jobs"]
+        leadTime: "Delivers in 2 days",
+        icon: "🛋️",
+        applications: ["Living room styling", "Movie nights", "Guest room layers"]
     },
     {
-        id: "sheet-plate-316",
-        name: "Mild Steel Plate",
-        category: "Steel",
-        thickness: "3/16\"",
-        price: 126.0,
-        unit: "sheet",
-        material: "A36 steel",
-        description: "Mid-weight plate for dock repairs, trailer reinforcement, and framing.",
+        id: "portable-speaker",
+        name: "Portable Bluetooth Speaker",
+        category: "Tech",
+        thickness: "Reset",
+        price: 88.0,
+        unit: "each",
+        material: "Mesh fabric & silicone",
+        description: "Compact waterproof speaker with rich bass and 14-hour playback.",
+        inventory: "In stock",
+        leadTime: "Delivers in 2 days",
+        icon: "🔊",
+        applications: ["Patio hangs", "Weekend trips", "Kitchen audio"]
+    },
+    {
+        id: "planner-set",
+        name: "Weekly Planner Set",
+        category: "Accessories",
+        thickness: "Focus",
+        price: 24.5,
+        unit: "set",
+        material: "Recycled paper",
+        description: "Minimal desk planner with habit tracker, sticky tabs, and goal sheets.",
+        inventory: "Low stock",
+        leadTime: "Ships in 1-2 days",
+        icon: "📒",
+        applications: ["Goal planning", "Desk organization", "Class schedules"]
+    },
+    {
+        id: "canvas-tote",
+        name: "Canvas Market Tote",
+        category: "Accessories",
+        thickness: "Cozy",
+        price: 27.75,
+        unit: "each",
+        material: "Organic cotton canvas",
+        description: "Structured everyday tote with interior pocket and reinforced straps.",
         inventory: "In stock",
         leadTime: "Ships in 1-2 days",
-        icon: "🏗️",
-        applications: ["Dock frame gussets", "Trailer reinforcement", "Structural repair panels"]
+        icon: "👜",
+        applications: ["Weekend errands", "Farmers market", "Daily carry"]
     },
     {
-        id: "sheet-plate-14",
-        name: "Mild Steel Plate",
-        category: "Steel",
-        thickness: "1/4\"",
-        price: 158.5,
-        unit: "sheet",
-        material: "A36 steel",
-        description: "Heavy-duty plate suited for ramps, support pads, and welded fixtures.",
-        inventory: "Low stock",
-        leadTime: "Ships in 3-4 days",
-        icon: "🛠️",
-        applications: ["Equipment pads", "Ramps and landings", "Heavy-duty welded fixtures"]
-    },
-    {
-        id: "checker-plate-38",
-        name: "Checker Plate",
-        category: "Steel",
-        thickness: "3/8\"",
-        price: 214.75,
-        unit: "sheet",
-        material: "Carbon steel",
-        description: "Slip-resistant deck plate for gangways, work platforms, and shop floors.",
+        id: "standing-desk-riser",
+        name: "Standing Desk Riser",
+        category: "Home",
+        thickness: "Focus",
+        price: 149.0,
+        unit: "each",
+        material: "Engineered wood & steel",
+        description: "Adjustable desktop riser for switching between sitting and standing.",
         inventory: "Special order",
         leadTime: "Ships in 5-7 days",
-        icon: "🧰",
-        applications: ["Gangways", "Service platforms", "Slip-resistant floor repairs"]
+        icon: "🖥️",
+        applications: ["Ergonomic workstations", "Shared desks", "Study setups"]
     },
     {
-        id: "rebar-bundle",
-        name: "Rebar Bundle",
-        category: "Construction Materials",
-        thickness: "1/2\"",
-        price: 132.0,
-        unit: "bundle",
-        material: "Grade 60 steel",
-        description: "Concrete reinforcement bundle for footings, pilings, and retaining walls.",
+        id: "yoga-mat",
+        name: "Cushioned Yoga Mat",
+        category: "Wellness",
+        thickness: "Reset",
+        price: 39.99,
+        unit: "each",
+        material: "Non-slip natural rubber",
+        description: "Supportive mat with alignment lines for stretching, yoga, and mobility sessions.",
         inventory: "In stock",
-        leadTime: "Next-day delivery",
-        icon: "🏢",
-        applications: ["Footings and slabs", "Pilings", "Retaining wall reinforcement"]
-    },
-    {
-        id: "angle-iron",
-        name: "Angle Iron Length",
-        category: "Construction Materials",
-        thickness: "1/4\"",
-        price: 46.25,
-        unit: "length",
-        material: "Hot rolled steel",
-        description: "20-foot angle stock for trailers, bracing, shelving, and general fabrication.",
-        inventory: "In stock",
-        leadTime: "Ships in 1-2 days",
-        icon: "📐",
-        applications: ["Rack bracing", "Trailer rails", "General steel framing"]
+        leadTime: "Delivers tomorrow",
+        icon: "🧘",
+        applications: ["Morning stretches", "Home workouts", "Meditation"]
     }
 ];
 
@@ -207,19 +207,6 @@ function uniqueValues(key) {
     return [...new Set(products.map((product) => product[key]))];
 }
 
-function thicknessSortValue(thickness) {
-    const normalized = thickness.replace(/"/g, "").trim();
-    if (normalized.includes("/")) {
-        const [numerator, denominator] = normalized.split("/").map(Number);
-        if (!Number.isNaN(numerator) && !Number.isNaN(denominator) && denominator !== 0) {
-            return numerator / denominator;
-        }
-    }
-
-    const numeric = Number(normalized);
-    return Number.isNaN(numeric) ? Number.MAX_SAFE_INTEGER : numeric;
-}
-
 function populateFilters() {
     uniqueValues("category").forEach((category) => {
         const option = document.createElement("option");
@@ -229,8 +216,7 @@ function populateFilters() {
     });
 
     uniqueValues("thickness")
-        .filter((value) => value !== "n/a")
-        .sort((left, right) => thicknessSortValue(left) - thicknessSortValue(right))
+        .sort((left, right) => left.localeCompare(right))
         .forEach((thickness) => {
             const option = document.createElement("option");
             option.value = thickness;
@@ -248,7 +234,7 @@ function getFilteredProducts() {
     const filteredProducts = products.filter((product) => {
         const categoryMatch = category === "all" || product.category === category;
         const thicknessMatch = thickness === "all" || product.thickness === thickness;
-        const termMatch = !term || [product.name, product.category, product.description, product.material]
+        const termMatch = !term || [product.name, product.category, product.description, product.material, product.thickness]
             .join(" ")
             .toLowerCase()
             .includes(term);
@@ -276,10 +262,6 @@ function inventoryClass(inventory) {
 }
 
 function productCard(product) {
-    const steelMeta = product.thickness !== "n/a"
-        ? `<span class="pill">${escapeHtml(product.thickness)} thickness</span>`
-        : `<span class="pill neutral">Standard fitment</span>`;
-
     return `
         <article class="product-card">
             <div class="product-card-header">
@@ -287,7 +269,7 @@ function productCard(product) {
                     <p class="product-category">${escapeHtml(product.category)}</p>
                     <h3>${escapeHtml(product.name)}</h3>
                 </div>
-                ${steelMeta}
+                <span class="pill">${escapeHtml(product.thickness)} collection</span>
             </div>
             <p class="product-description">${escapeHtml(product.description)}</p>
             <div class="product-highlights">
@@ -324,7 +306,7 @@ function renderProductDetail(productId = selectedProductId) {
     detailName.textContent = product.name;
     detailDescription.textContent = product.description;
     detailMaterial.textContent = product.material;
-    detailThickness.textContent = product.thickness === "n/a" ? "Standard fitment" : product.thickness;
+    detailThickness.textContent = product.thickness;
     detailInventory.textContent = product.inventory;
     detailLeadTime.textContent = product.leadTime;
     detailApplications.innerHTML = product.applications
@@ -341,7 +323,7 @@ function renderProducts() {
         productGrid.innerHTML = `
             <div class="empty-state">
                 <h3>No products match those filters</h3>
-                <p>Try another category, remove the thickness filter, or search for a broader term.</p>
+                <p>Try another category, clear the collection filter, or search for a broader term.</p>
             </div>
         `;
         return;
@@ -391,18 +373,18 @@ function renderCart() {
         const product = productsById.get(productId);
         return sum + (product ? product.price * quantity : 0);
     }, 0);
-    const freight = subtotal > 0 ? Math.max(45, subtotal * 0.08) : 0;
+    const freight = subtotal > 0 ? (subtotal >= 150 ? 0 : 12.99) : 0;
 
     cartCount.textContent = `${count} item${count === 1 ? "" : "s"}`;
     cartSubtotal.textContent = currency(subtotal);
-    shippingEstimate.textContent = currency(freight);
+    shippingEstimate.textContent = freight === 0 && subtotal > 0 ? "Free" : currency(freight);
     cartTotal.textContent = currency(subtotal + freight);
 
     if (!entries.length) {
         cartItems.innerHTML = `
             <div class="empty-state compact">
                 <h3>Your cart is empty</h3>
-                <p>Add marine hardware or steel stock to build a quote request.</p>
+                <p>Add products to start building your order.</p>
             </div>
         `;
         return;
@@ -414,7 +396,7 @@ function renderCart() {
             <article class="cart-item">
                 <div>
                     <h3>${escapeHtml(product.name)}</h3>
-                    <p>${escapeHtml(product.category)}${product.thickness !== "n/a" ? ` · ${escapeHtml(product.thickness)}` : ""}</p>
+                    <p>${escapeHtml(product.category)} · ${escapeHtml(product.thickness)}</p>
                 </div>
                 <div class="cart-item-controls">
                     <button class="qty-button" type="button" aria-label="Decrease quantity of ${escapeHtml(product.name)}" data-action="decrease" data-product-id="${escapeHtml(productId)}">−</button>
@@ -428,9 +410,10 @@ function renderCart() {
 }
 
 function addBundle() {
-    cart.set("cleat-set", (cart.get("cleat-set") || 0) + 1);
-    cart.set("marine-fasteners", (cart.get("marine-fasteners") || 0) + 1);
-    cart.set("sheet-plate-316", (cart.get("sheet-plate-316") || 0) + 2);
+    cart.set("wireless-headphones", (cart.get("wireless-headphones") || 0) + 1);
+    cart.set("smart-desk-lamp", (cart.get("smart-desk-lamp") || 0) + 1);
+    cart.set("insulated-bottle", (cart.get("insulated-bottle") || 0) + 1);
+    cart.set("aroma-diffuser", (cart.get("aroma-diffuser") || 0) + 1);
     clearQuoteMessage();
     renderCart();
 }
@@ -480,14 +463,16 @@ function handleQuoteSubmit(event) {
     event.preventDefault();
 
     if (!cart.size) {
-        setQuoteMessage("Add at least one product before submitting a quote request.", "error");
+        setQuoteMessage("Add at least one product before placing your order.", "error");
         return;
     }
 
     const customerName = sanitizePlainText(document.getElementById("customerName").value) || "customer";
     const customerEmail = document.getElementById("customerEmail").value.trim();
-    setQuoteMessage(`Thanks, ${customerName}. Your quote request was prepared with ${cartCount.textContent}. Our team will follow up at ${customerEmail} with pricing and delivery options shortly.`, "success");
+    setQuoteMessage(`Thanks, ${customerName}. Your order for ${cartCount.textContent} is confirmed, and a receipt will be sent to ${customerEmail}.`, "success");
     quoteForm.reset();
+    cart.clear();
+    renderCart();
 }
 
 populateFilters();

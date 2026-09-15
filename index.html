@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harbor & Steel Supply</title>
+    <title>LumaCart</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,51 +11,51 @@
         <header class="hero">
             <nav class="navbar">
                 <div class="brand">
-                    <span class="brand-mark">⚓</span>
+                    <span class="brand-mark">🛍️</span>
                     <div>
-                        <p class="eyebrow">Marine hardware & industrial stock</p>
-                        <h1>Harbor & Steel Supply</h1>
+                        <p class="eyebrow">Everyday picks for home, tech, and wellness</p>
+                        <h1>LumaCart</h1>
                     </div>
                 </div>
                 <div class="nav-actions">
                     <a href="#catalog">Catalog</a>
-                    <a href="#materials">Material Guide</a>
-                    <a href="#cartPanel">Quote Cart</a>
+                    <a href="#materials">Why shop</a>
+                    <a href="#cartPanel">Cart</a>
                 </div>
             </nav>
 
             <div class="hero-content">
                 <div>
-                    <p class="eyebrow">Boat parts + structural materials in one order</p>
-                    <h2>Shop marine essentials, sheet steel, and heavy-duty construction supplies.</h2>
+                    <p class="eyebrow">Fresh deals across your daily routine</p>
+                    <h2>Shop smart gadgets, cozy essentials, and feel-good favorites in one place.</h2>
                     <p class="hero-copy">
-                        Browse corrosion-resistant boat parts, dock hardware, and steel stock with
-                        multiple thickness options for fabrication and building projects.
+                        Browse curated products with quick filters, live cart totals, and a simple checkout form
+                        built for a polished shopping experience.
                     </p>
                     <div class="hero-metrics">
                         <div>
-                            <strong>150+</strong>
-                            <span>marine and jobsite products</span>
+                            <strong>120+</strong>
+                            <span>curated lifestyle products</span>
                         </div>
                         <div>
-                            <strong>6</strong>
-                            <span>steel thickness options</span>
+                            <strong>3</strong>
+                            <span>featured collections</span>
                         </div>
                         <div>
-                            <strong>24h</strong>
-                            <span>quote turnaround</span>
+                            <strong>2-day</strong>
+                            <span>standard shipping</span>
                         </div>
                     </div>
                 </div>
 
                 <aside class="hero-card">
-                    <p class="eyebrow">Popular build bundle</p>
-                    <h3>Dock Repair Starter Loadout</h3>
+                    <p class="eyebrow">Popular starter bundle</p>
+                    <h3>Work + Reset Bundle</h3>
                     <ul>
-                        <li>316 stainless cleats</li>
-                        <li>Galvanized fastener kit</li>
-                        <li>3/16&quot; steel plate sheets</li>
-                        <li>Protective primer and sealant</li>
+                        <li>Wireless headphones</li>
+                        <li>Smart desk lamp</li>
+                        <li>Insulated bottle</li>
+                        <li>Aromatherapy diffuser</li>
                     </ul>
                     <button class="btn-primary" id="bundleButton" type="button">Add bundle to cart</button>
                 </aside>
@@ -66,13 +66,13 @@
             <section class="filters-section" id="catalog">
                 <div>
                     <p class="eyebrow">Product catalog</p>
-                    <h2 id="catalogHeading">Find the right part or material</h2>
+                    <h2 id="catalogHeading">Find the right item for your routine</h2>
                 </div>
 
                 <div class="filters-grid">
                     <label class="filter-control">
                         <span>Search</span>
-                        <input type="search" id="searchInput" placeholder="Search by product, use, or material">
+                        <input type="search" id="searchInput" placeholder="Search by product, category, or material">
                     </label>
 
                     <label class="filter-control">
@@ -83,9 +83,9 @@
                     </label>
 
                     <label class="filter-control">
-                        <span>Steel thickness</span>
+                        <span>Collection</span>
                         <select id="thicknessFilter">
-                            <option value="all">All thicknesses</option>
+                            <option value="all">All collections</option>
                         </select>
                     </label>
 
@@ -113,8 +113,8 @@
                 <aside class="cart-panel" id="cartPanel">
                     <div class="cart-header">
                         <div>
-                            <p class="eyebrow">Quote cart</p>
-                            <h2>Current order</h2>
+                            <p class="eyebrow">Shopping cart</p>
+                            <h2>Your order</h2>
                         </div>
                         <span class="cart-badge" id="cartCount">0 items</span>
                     </div>
@@ -127,32 +127,32 @@
                             <strong id="cartSubtotal">$0.00</strong>
                         </div>
                         <div>
-                            <span>Demo freight estimate</span>
+                            <span>Shipping</span>
                             <strong id="shippingEstimate">$0.00</strong>
                         </div>
                         <div class="cart-total">
-                            <span>Demo order estimate</span>
+                            <span>Order total</span>
                             <strong id="cartTotal">$0.00</strong>
                         </div>
                     </div>
 
-                    <p class="summary-note">Freight and final pricing are rough demo estimates based on cart value only.</p>
+                    <p class="summary-note">Shipping is estimated from cart value for this demo checkout experience.</p>
 
                     <form id="quoteForm" class="quote-form">
-                        <h3>Request pricing</h3>
+                        <h3>Checkout</h3>
                         <label class="filter-control">
                             <span>Name</span>
-                            <input type="text" id="customerName" placeholder="Project buyer name" required>
+                            <input type="text" id="customerName" placeholder="Full name" required>
                         </label>
                         <label class="filter-control">
                             <span>Email</span>
                             <input type="email" id="customerEmail" placeholder="you@example.com" required>
                         </label>
                         <label class="filter-control">
-                            <span>Project notes</span>
-                            <textarea id="projectNotes" rows="4" placeholder="Tell us about delivery needs, cuts, coatings, or boat model fitment"></textarea>
+                            <span>Shipping address</span>
+                            <textarea id="projectNotes" rows="4" placeholder="Street, city, state, and delivery notes" required></textarea>
                         </label>
-                        <button class="btn-primary" type="submit">Submit quote request</button>
+                        <button class="btn-primary" type="submit">Place order</button>
                     </form>
 
                     <div id="quoteMessage" class="quote-message" aria-live="polite"></div>
@@ -167,11 +167,11 @@
 
                 <div class="detail-grid">
                     <div class="detail-summary">
-                        <div class="detail-icon" id="detailIcon" aria-hidden="true">⚓</div>
+                        <div class="detail-icon" id="detailIcon" aria-hidden="true">🛍️</div>
                         <div>
-                            <p class="detail-category" id="detailCategory">Boat Parts</p>
-                            <h3 id="detailName">Choose a product to inspect its specs</h3>
-                            <p id="detailDescription">Review fitment, stock level, lead time, and material details before adding it to your quote cart.</p>
+                            <p class="detail-category" id="detailCategory">Accessories</p>
+                            <h3 id="detailName">Choose a product to inspect its details</h3>
+                            <p id="detailDescription">Review the material, collection, stock level, and shipping timeline before adding an item to your cart.</p>
                         </div>
                     </div>
 
@@ -181,7 +181,7 @@
                             <strong id="detailMaterial">—</strong>
                         </article>
                         <article>
-                            <span>Thickness</span>
+                            <span>Collection</span>
                             <strong id="detailThickness">—</strong>
                         </article>
                         <article>
@@ -189,7 +189,7 @@
                             <strong id="detailInventory">—</strong>
                         </article>
                         <article>
-                            <span>Lead time</span>
+                            <span>Delivery</span>
                             <strong id="detailLeadTime">—</strong>
                         </article>
                     </div>
@@ -203,26 +203,26 @@
 
             <section class="materials-section" id="materials">
                 <div class="section-heading">
-                    <p class="eyebrow">Material guide</p>
-                    <h2>Steel thickness options for marine and construction work</h2>
+                    <p class="eyebrow">Why shop</p>
+                    <h2>Built for quick browsing and confident checkout</h2>
                 </div>
 
                 <div class="materials-grid">
                     <article>
-                        <h3>1/8&quot; plate</h3>
-                        <p>Common for brackets, mounting tabs, deck reinforcement, and light patch panels.</p>
+                        <h3>Curated catalog</h3>
+                        <p>Explore a focused mix of best-selling tech, home, and wellness items without endless scrolling.</p>
                     </article>
                     <article>
-                        <h3>3/16&quot; plate</h3>
-                        <p>Balanced option for trailer repairs, dock framing gussets, and general fabrication.</p>
+                        <h3>Fast filtering</h3>
+                        <p>Use search, category, and collection filters to narrow the catalog and compare the right products faster.</p>
                     </article>
                     <article>
-                        <h3>1/4&quot; plate</h3>
-                        <p>Good fit for structural base plates, bollards, heavy equipment supports, and ramps.</p>
+                        <h3>Live cart totals</h3>
+                        <p>Track quantities, subtotal, shipping, and total in real time while building your order.</p>
                     </article>
                     <article>
-                        <h3>3/8&quot; plate</h3>
-                        <p>Selected for higher-load applications including seawall braces and skid-resistant platforms.</p>
+                        <h3>Simple checkout</h3>
+                        <p>Finish the demo order with a lightweight checkout form and instant confirmation message.</p>
                     </article>
                 </div>
             </section>
