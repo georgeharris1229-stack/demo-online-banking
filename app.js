@@ -267,6 +267,7 @@ function addToCart(productId, quantity = 1) {
 function updateCartQuantity(productId, nextQuantity) {
     if (!productsById.has(productId)) {
         cart.delete(productId);
+        clearQuoteMessage();
         renderCart();
         return;
     }
@@ -282,7 +283,7 @@ function updateCartQuantity(productId, nextQuantity) {
 
 function renderCart() {
     for (const productId of [...cart.keys()]) {
-        if (!products.some((item) => item.id === productId)) {
+        if (!productsById.has(productId)) {
             cart.delete(productId);
         }
     }
@@ -320,7 +321,7 @@ function renderCart() {
                 </div>
                 <div class="cart-item-controls">
                     <button class="qty-button" type="button" aria-label="Decrease quantity of ${escapeHtml(product.name)}" data-action="decrease" data-product-id="${escapeHtml(productId)}">−</button>
-                    <span aria-label="Quantity of ${escapeHtml(product.name)}">${quantity}</span>
+                    <span role="status" aria-live="polite">Qty: ${quantity}</span>
                     <button class="qty-button" type="button" aria-label="Increase quantity of ${escapeHtml(product.name)}" data-action="increase" data-product-id="${escapeHtml(productId)}">+</button>
                     <strong>${currency(product.price * quantity)}</strong>
                 </div>
@@ -379,7 +380,7 @@ function handleQuoteSubmit(event) {
     }
 
     const customerName = sanitizePlainText(document.getElementById("customerName").value) || "customer";
-    const customerEmail = sanitizePlainText(document.getElementById("customerEmail").value);
+    const customerEmail = document.getElementById("customerEmail").value.trim();
     setQuoteMessage(`Thanks, ${customerName}. Your quote request was prepared with ${cartCount.textContent}. Our team will follow up at ${customerEmail} with pricing and delivery options shortly.`, "success");
     quoteForm.reset();
 }
