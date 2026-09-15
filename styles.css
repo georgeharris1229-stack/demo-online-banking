@@ -321,7 +321,10 @@ textarea {
 .btn-primary:focus-visible,
 .btn-secondary:focus-visible,
 .qty-button:focus-visible,
-.nav-actions a:focus-visible {
+.nav-actions a:focus-visible,
+.filter-control input:focus-visible,
+.filter-control select:focus-visible,
+.filter-control textarea:focus-visible {
     outline: 3px solid #ffd166;
     outline-offset: 3px;
 }

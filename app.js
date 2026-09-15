@@ -145,6 +145,10 @@ function clearQuoteMessage() {
     quoteMessage.className = "quote-message";
 }
 
+function sanitizePlainText(value) {
+    return String(value).replace(/[<>&]/g, "").trim();
+}
+
 function uniqueValues(key) {
     return [...new Set(products.map((product) => product[key]))];
 }
@@ -252,7 +256,7 @@ function updateCartQuantity(productId, nextQuantity) {
 }
 
 function renderCart() {
-    for (const productId of cart.keys()) {
+    for (const productId of [...cart.keys()]) {
         if (!products.some((item) => item.id === productId)) {
             cart.delete(productId);
         }
@@ -349,7 +353,7 @@ function handleQuoteSubmit(event) {
         return;
     }
 
-    const customerName = document.getElementById("customerName").value.trim();
+    const customerName = sanitizePlainText(document.getElementById("customerName").value) || "customer";
     setQuoteMessage(`Thanks, ${customerName}. Your quote request was prepared with ${cartCount.textContent}. Our team will email pricing and delivery options shortly.`, "success");
     quoteForm.reset();
 }
