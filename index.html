@@ -161,6 +161,26 @@
                         </div>
                     </div>
 
+                    <div class="coupon-panel">
+                        <label class="filter-control compact-control" for="couponInput">
+                            <span>Coupon code</span>
+                            <input type="text" id="couponInput" placeholder="Enter code">
+                        </label>
+                        <div class="coupon-actions">
+                            <button class="btn-secondary" id="applyCouponButton" type="button">Apply coupon</button>
+                            <button class="btn-secondary" id="removeCouponButton" type="button">Remove</button>
+                        </div>
+                        <p id="couponMessage" class="coupon-message" aria-live="polite"></p>
+                    </div>
+
+                    <section class="wishlist-panel" aria-labelledby="wishlistHeading">
+                        <div class="wishlist-header">
+                            <h3 id="wishlistHeading">Wishlist</h3>
+                            <span class="cart-badge" id="wishlistCount">0 saved</span>
+                        </div>
+                        <div id="wishlistItems" class="wishlist-items"></div>
+                    </section>
+
                     <p class="summary-note">Shipping is estimated from cart value for this demo checkout experience.</p>
 
                     <form id="quoteForm" class="quote-form">

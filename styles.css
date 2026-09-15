@@ -194,6 +194,10 @@ textarea {
     font-weight: 700;
 }
 
+.filter-control.compact-control {
+    flex: 1 1 auto;
+}
+
 .filter-control input,
 .filter-control select,
 .filter-control textarea {
@@ -428,6 +432,11 @@ mark {
     transform: none;
 }
 
+.wishlist-button.active {
+    background: #dff6f6;
+    color: var(--accent-dark);
+}
+
 .cart-items {
     display: flex;
     flex-direction: column;
@@ -539,6 +548,75 @@ mark {
 
 .checkout-summary strong {
     font-size: 1rem;
+}
+
+.coupon-panel,
+.wishlist-panel {
+    margin-top: 18px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: #f8fbff;
+}
+
+.coupon-actions,
+.wishlist-header,
+.wishlist-item {
+    display: flex;
+}
+
+.coupon-actions,
+.wishlist-header {
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.coupon-actions {
+    margin-top: 12px;
+}
+
+.coupon-message {
+    min-height: 1.4rem;
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.coupon-message.success {
+    color: #176b52;
+}
+
+.coupon-message.error {
+    color: #b42318;
+}
+
+.wishlist-header h3 {
+    margin: 0;
+}
+
+.wishlist-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.wishlist-item {
+    justify-content: space-between;
+    gap: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.wishlist-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.discount-row strong {
+    color: #176b52;
 }
 
 .detail-panel {
@@ -682,10 +760,15 @@ mark {
     .product-card-header,
     .product-card-footer,
     .cart-header,
-    .card-pill-stack {
+    .card-pill-stack,
+    .wishlist-item {
         gap: 12px;
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .coupon-actions {
+        width: 100%;
     }
 
     .cart-item-controls {

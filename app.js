@@ -148,6 +148,10 @@ const products = [
 
 const FREE_SHIPPING_THRESHOLD = 150;
 const STANDARD_SHIPPING = 12.99;
+const coupons = {
+    SAVE10: { type: "percent", value: 0.1, label: "10% off" },
+    WELCOME5: { type: "fixed", value: 5, label: "$5 off" }
+};
 const storage = (() => {
     try {
         return typeof localStorage === "undefined" ? null : localStorage;
@@ -158,12 +162,16 @@ const storage = (() => {
 const storageKeys = {
     cart: "lumacart-cart",
     filters: "lumacart-filters",
-    selectedProductId: "lumacart-selected-product"
+    selectedProductId: "lumacart-selected-product",
+    wishlist: "lumacart-wishlist",
+    coupon: "lumacart-coupon"
 };
 
 const cart = new Map();
+const wishlist = new Set();
 const productsById = new Map(products.map((product) => [product.id, product]));
 let selectedProductId = products[0].id;
+let activeCouponCode = "";
 
 const productGrid = document.getElementById("productGrid");
 const resultsCount = document.getElementById("resultsCount");
@@ -197,6 +205,12 @@ const shippingProgressBar = document.getElementById("shippingProgressBar");
 const summaryItemCount = document.getElementById("summaryItemCount");
 const summaryDelivery = document.getElementById("summaryDelivery");
 const summarySavings = document.getElementById("summarySavings");
+const couponInput = document.getElementById("couponInput");
+const applyCouponButton = document.getElementById("applyCouponButton");
+const removeCouponButton = document.getElementById("removeCouponButton");
+const couponMessage = document.getElementById("couponMessage");
+const wishlistCount = document.getElementById("wishlistCount");
+const wishlistItems = document.getElementById("wishlistItems");
 
 function currency(value) {
     return new Intl.NumberFormat("en-US", {
@@ -256,6 +270,14 @@ function writeStoredJson(key, value) {
     }
 
     storage.setItem(key, JSON.stringify(value));
+}
+
+function removeStoredValue(key) {
+    if (!storage) {
+        return;
+    }
+
+    storage.removeItem(key);
 }
 
 function loadStoredSelection() {
@@ -323,6 +345,61 @@ function loadStoredCart() {
 
 function saveCart() {
     writeStoredJson(storageKeys.cart, [...cart.entries()]);
+}
+
+function loadStoredWishlist() {
+    const storedWishlist = readStoredJson(storageKeys.wishlist);
+    if (!Array.isArray(storedWishlist)) {
+        return;
+    }
+
+    storedWishlist.forEach((productId) => {
+        if (typeof productId === "string" && productsById.has(productId)) {
+            wishlist.add(productId);
+        }
+    });
+}
+
+function saveWishlist() {
+    writeStoredJson(storageKeys.wishlist, [...wishlist]);
+}
+
+function loadStoredCoupon() {
+    if (!storage) {
+        return;
+    }
+
+    const storedCoupon = storage.getItem(storageKeys.coupon);
+    if (storedCoupon && coupons[storedCoupon]) {
+        activeCouponCode = storedCoupon;
+        couponInput.value = storedCoupon;
+    }
+}
+
+function setCouponMessage(message, state = "") {
+    couponMessage.textContent = message;
+    couponMessage.className = `coupon-message${state ? ` ${state}` : ""}`;
+}
+
+function clearCouponMessage() {
+    setCouponMessage("");
+}
+
+function activeCoupon() {
+    return coupons[activeCouponCode] || null;
+}
+
+function discountAmount(subtotal) {
+    const coupon = activeCoupon();
+    if (!coupon || subtotal <= 0) {
+        return 0;
+    }
+
+    if (coupon.type === "percent") {
+        return Math.min(subtotal, Number((subtotal * coupon.value).toFixed(2)));
+    }
+
+    return Math.min(subtotal, coupon.value);
 }
 
 function populateFilters() {
@@ -396,6 +473,8 @@ function productCard(product) {
     const badge = product.badge
         ? `<span class="product-badge">${escapeHtml(product.badge)}</span>`
         : "";
+    const wishlistAction = wishlist.has(product.id) ? "Saved" : "Save";
+    const wishlistStateClass = wishlist.has(product.id) ? " active" : "";
 
     return `
         <article class="product-card">
@@ -427,6 +506,7 @@ function productCard(product) {
             <div class="product-card-footer product-card-actions">
                 <strong>${currency(product.price)}</strong>
                 <div class="button-group">
+                    <button class="btn-secondary wishlist-button${wishlistStateClass}" type="button" data-wishlist-id="${escapeHtml(product.id)}">${wishlistAction}</button>
                     <button class="btn-secondary" type="button" data-detail-id="${escapeHtml(product.id)}">View details</button>
                     <button class="btn-primary" type="button" data-product-id="${escapeHtml(product.id)}">Add to cart</button>
                 </div>
@@ -515,30 +595,36 @@ function renderCart() {
         const product = productsById.get(productId);
         return sum + (product ? product.price * quantity : 0);
     }, 0);
-    const freight = subtotal > 0 ? (subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING) : 0;
+    const discount = discountAmount(subtotal);
+    const discountedSubtotal = subtotal - discount;
+    const freight = discountedSubtotal > 0 ? (discountedSubtotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING) : 0;
     const freeShippingGap = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
     const shippingProgress = subtotal <= 0
         ? 0
         : Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
-    const savings = subtotal >= FREE_SHIPPING_THRESHOLD ? STANDARD_SHIPPING : 0;
+    const shippingSavings = discountedSubtotal >= FREE_SHIPPING_THRESHOLD ? STANDARD_SHIPPING : 0;
+    const savings = shippingSavings + discount;
 
     cartCount.textContent = `${count} item${count === 1 ? "" : "s"}`;
     cartSubtotal.textContent = currency(subtotal);
     shippingEstimate.textContent = freight === 0 && subtotal > 0 ? "Free" : currency(freight);
-    cartTotal.textContent = currency(subtotal + freight);
+    cartTotal.textContent = currency(discountedSubtotal + freight);
     shippingMessage.textContent = subtotal > 0 && freeShippingGap === 0
         ? "You unlocked free shipping."
         : `Add ${currency(freeShippingGap || FREE_SHIPPING_THRESHOLD)} to unlock free shipping.`;
     shippingProgressBar.style.width = `${shippingProgress}%`;
     summaryItemCount.textContent = String(count);
-    summaryDelivery.textContent = subtotal >= FREE_SHIPPING_THRESHOLD
+    summaryDelivery.textContent = discountedSubtotal >= FREE_SHIPPING_THRESHOLD
         ? "Free standard shipping"
         : count > 0
             ? "Standard shipping"
             : "Standard shipping";
     summarySavings.textContent = savings > 0 ? currency(savings) : "$0.00";
     clearCartButton.disabled = !entries.length;
+    removeCouponButton.disabled = !activeCouponCode;
+    applyCouponButton.disabled = !couponInput.value.trim();
     saveCart();
+    renderWishlist();
 
     if (!entries.length) {
         cartItems.innerHTML = `
@@ -567,6 +653,20 @@ function renderCart() {
             </article>
         `;
     }).join("");
+
+    if (discount > 0) {
+        cartItems.innerHTML += `
+            <article class="cart-item discount-row">
+                <div>
+                    <h3>Coupon applied</h3>
+                    <p>${escapeHtml(activeCouponCode)} · ${escapeHtml(activeCoupon().label)}</p>
+                </div>
+                <div class="cart-item-controls">
+                    <strong>-${currency(discount)}</strong>
+                </div>
+            </article>
+        `;
+    }
 }
 
 function addBundle() {
@@ -579,6 +679,12 @@ function addBundle() {
 }
 
 function handleProductGridClick(event) {
+    const wishlistButton = event.target.closest("button[data-wishlist-id]");
+    if (wishlistButton) {
+        toggleWishlist(wishlistButton.dataset.wishlistId);
+        return;
+    }
+
     const detailButton = event.target.closest("button[data-detail-id]");
     if (detailButton) {
         renderProductDetail(detailButton.dataset.detailId);
@@ -635,6 +741,103 @@ function clearCart() {
     renderCart();
 }
 
+function renderWishlist() {
+    const items = [...wishlist].map((productId) => productsById.get(productId)).filter(Boolean);
+    wishlistCount.textContent = `${items.length} saved`;
+
+    if (!items.length) {
+        wishlistItems.innerHTML = `
+            <div class="empty-state compact">
+                <h3>No saved items</h3>
+                <p>Save products to revisit them later.</p>
+            </div>
+        `;
+        saveWishlist();
+        renderProducts();
+        return;
+    }
+
+    wishlistItems.innerHTML = items.map((product) => `
+        <article class="wishlist-item">
+            <div>
+                <h3>${escapeHtml(product.name)}</h3>
+                <p>${escapeHtml(product.category)} · ${escapeHtml(product.thickness)}</p>
+            </div>
+            <div class="button-group">
+                <button class="btn-secondary" type="button" data-wishlist-remove-id="${escapeHtml(product.id)}">Remove</button>
+                <button class="btn-primary" type="button" data-wishlist-cart-id="${escapeHtml(product.id)}">Move to cart</button>
+            </div>
+        </article>
+    `).join("");
+
+    saveWishlist();
+    renderProducts();
+}
+
+function toggleWishlist(productId) {
+    if (!productsById.has(productId)) {
+        return;
+    }
+
+    if (wishlist.has(productId)) {
+        wishlist.delete(productId);
+    } else {
+        wishlist.add(productId);
+    }
+
+    renderWishlist();
+}
+
+function handleWishlistClick(event) {
+    const moveButton = event.target.closest("button[data-wishlist-cart-id]");
+    if (moveButton) {
+        const productId = moveButton.dataset.wishlistCartId;
+        wishlist.delete(productId);
+        addToCart(productId, 1);
+        renderWishlist();
+        return;
+    }
+
+    const removeButton = event.target.closest("button[data-wishlist-remove-id]");
+    if (!removeButton) {
+        return;
+    }
+
+    wishlist.delete(removeButton.dataset.wishlistRemoveId);
+    renderWishlist();
+}
+
+function applyCoupon() {
+    const code = sanitizePlainText(couponInput.value).toUpperCase();
+    if (!code || !coupons[code]) {
+        activeCouponCode = "";
+        removeStoredValue(storageKeys.coupon);
+        setCouponMessage("Enter a valid coupon code like SAVE10 or WELCOME5.", "error");
+        renderCart();
+        return;
+    }
+
+    activeCouponCode = code;
+    if (storage) {
+        storage.setItem(storageKeys.coupon, code);
+    }
+    couponInput.value = code;
+    setCouponMessage(`${code} applied: ${coupons[code].label}.`, "success");
+    renderCart();
+}
+
+function removeCoupon() {
+    if (!activeCouponCode) {
+        return;
+    }
+
+    activeCouponCode = "";
+    couponInput.value = "";
+    removeStoredValue(storageKeys.coupon);
+    clearCouponMessage();
+    renderCart();
+}
+
 function handleQuoteSubmit(event) {
     event.preventDefault();
 
@@ -648,11 +851,16 @@ function handleQuoteSubmit(event) {
     setQuoteMessage(`Thanks, ${customerName}. Your order for ${cartCount.textContent} is confirmed, and a receipt will be sent to ${customerEmail}.`, "success");
     quoteForm.reset();
     cart.clear();
+    activeCouponCode = "";
+    removeStoredValue(storageKeys.coupon);
+    clearCouponMessage();
     renderCart();
 }
 
 populateFilters();
 loadStoredCart();
+loadStoredWishlist();
+loadStoredCoupon();
 loadStoredSelection();
 renderProducts();
 renderCart();
@@ -660,12 +868,19 @@ renderProductDetail();
 
 productGrid.addEventListener("click", handleProductGridClick);
 cartItems.addEventListener("click", handleCartClick);
+wishlistItems.addEventListener("click", handleWishlistClick);
 categoryFilter.addEventListener("change", handleFiltersChange);
 thicknessFilter.addEventListener("change", handleFiltersChange);
 sortFilter.addEventListener("change", handleFiltersChange);
 searchInput.addEventListener("input", handleFiltersChange);
 clearFiltersButton.addEventListener("click", clearFilters);
 clearCartButton.addEventListener("click", clearCart);
+applyCouponButton.addEventListener("click", applyCoupon);
+removeCouponButton.addEventListener("click", removeCoupon);
+couponInput.addEventListener("input", () => {
+    clearCouponMessage();
+    applyCouponButton.disabled = !couponInput.value.trim();
+});
 quoteForm.addEventListener("submit", handleQuoteSubmit);
 bundleButton.addEventListener("click", addBundle);
 quoteForm.addEventListener("input", clearQuoteMessage);
