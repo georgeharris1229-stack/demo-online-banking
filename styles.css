@@ -88,7 +88,8 @@ textarea {
 .brand,
 .nav-actions,
 .hero-metrics,
-.cart-item-controls {
+.cart-item-controls,
+.cart-header-actions {
     display: flex;
     align-items: center;
 }
@@ -394,6 +395,12 @@ textarea {
     color: var(--text);
 }
 
+.btn-secondary:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    transform: none;
+}
+
 .cart-items {
     display: flex;
     flex-direction: column;
@@ -407,6 +414,12 @@ textarea {
     background: #eff6ff;
     color: #27496d;
     font-weight: 700;
+}
+
+.cart-header-actions {
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .cart-item {
@@ -447,6 +460,33 @@ textarea {
     color: var(--muted);
     font-size: 0.92rem;
     line-height: 1.5;
+}
+
+.shipping-status {
+    margin-top: 18px;
+}
+
+.shipping-status p {
+    margin: 0 0 10px;
+    color: var(--accent-dark);
+    font-weight: 700;
+}
+
+.shipping-progress {
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: #edf2f7;
+    overflow: hidden;
+}
+
+.shipping-progress span {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--accent), #52c7c7);
+    transition: width 0.2s ease;
 }
 
 .detail-panel {

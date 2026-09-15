@@ -141,6 +141,21 @@ const products = [
     }
 ];
 
+const FREE_SHIPPING_THRESHOLD = 150;
+const STANDARD_SHIPPING = 12.99;
+const storage = (() => {
+    try {
+        return typeof localStorage === "undefined" ? null : localStorage;
+    } catch {
+        return null;
+    }
+})();
+const storageKeys = {
+    cart: "lumacart-cart",
+    filters: "lumacart-filters",
+    selectedProductId: "lumacart-selected-product"
+};
+
 const cart = new Map();
 const productsById = new Map(products.map((product) => [product.id, product]));
 let selectedProductId = products[0].id;
@@ -159,6 +174,7 @@ const sortFilter = document.getElementById("sortFilter");
 const searchInput = document.getElementById("searchInput");
 const quoteForm = document.getElementById("quoteForm");
 const clearFiltersButton = document.getElementById("clearFiltersButton");
+const clearCartButton = document.getElementById("clearCartButton");
 const bundleButton = document.getElementById("bundleButton");
 const detailPanel = document.getElementById("detailPanel");
 const detailIcon = document.getElementById("detailIcon");
@@ -171,6 +187,8 @@ const detailInventory = document.getElementById("detailInventory");
 const detailLeadTime = document.getElementById("detailLeadTime");
 const detailApplications = document.getElementById("detailApplications");
 const detailAddButton = document.getElementById("detailAddButton");
+const shippingMessage = document.getElementById("shippingMessage");
+const shippingProgressBar = document.getElementById("shippingProgressBar");
 
 function currency(value) {
     return new Intl.NumberFormat("en-US", {
@@ -207,6 +225,94 @@ function uniqueValues(key) {
     return [...new Set(products.map((product) => product[key]))];
 }
 
+function readStoredJson(key) {
+    if (!storage) {
+        return null;
+    }
+
+    try {
+        const value = storage.getItem(key);
+        return value ? JSON.parse(value) : null;
+    } catch {
+        return null;
+    }
+}
+
+function writeStoredJson(key, value) {
+    if (!storage) {
+        return;
+    }
+
+    storage.setItem(key, JSON.stringify(value));
+}
+
+function loadStoredSelection() {
+    if (!storage) {
+        return;
+    }
+
+    const storedProductId = storage.getItem(storageKeys.selectedProductId);
+    if (storedProductId && productsById.has(storedProductId)) {
+        selectedProductId = storedProductId;
+    }
+}
+
+function loadStoredFilters() {
+    const storedFilters = readStoredJson(storageKeys.filters);
+    if (!storedFilters) {
+        return;
+    }
+
+    if (typeof storedFilters.category === "string") {
+        categoryFilter.value = storedFilters.category;
+    }
+
+    if (typeof storedFilters.collection === "string") {
+        thicknessFilter.value = storedFilters.collection;
+    }
+
+    if (typeof storedFilters.sort === "string") {
+        sortFilter.value = storedFilters.sort;
+    }
+
+    if (typeof storedFilters.search === "string") {
+        searchInput.value = storedFilters.search;
+    }
+}
+
+function saveFilters() {
+    writeStoredJson(storageKeys.filters, {
+        category: categoryFilter.value,
+        collection: thicknessFilter.value,
+        sort: sortFilter.value,
+        search: searchInput.value
+    });
+}
+
+function loadStoredCart() {
+    const storedCart = readStoredJson(storageKeys.cart);
+    if (!Array.isArray(storedCart)) {
+        return;
+    }
+
+    storedCart.forEach((entry) => {
+        if (!Array.isArray(entry) || entry.length !== 2) {
+            return;
+        }
+
+        const [productId, quantity] = entry;
+        if (!productsById.has(productId) || !Number.isInteger(quantity) || quantity <= 0) {
+            return;
+        }
+
+        cart.set(productId, quantity);
+    });
+}
+
+function saveCart() {
+    writeStoredJson(storageKeys.cart, [...cart.entries()]);
+}
+
 function populateFilters() {
     uniqueValues("category").forEach((category) => {
         const option = document.createElement("option");
@@ -223,6 +329,8 @@ function populateFilters() {
             option.textContent = thickness;
             thicknessFilter.appendChild(option);
         });
+
+    loadStoredFilters();
 }
 
 function getFilteredProducts() {
@@ -313,6 +421,10 @@ function renderProductDetail(productId = selectedProductId) {
         .map((application) => `<li>${escapeHtml(application)}</li>`)
         .join("");
     detailAddButton.dataset.productId = product.id;
+
+    if (storage) {
+        storage.setItem(storageKeys.selectedProductId, product.id);
+    }
 }
 
 function renderProducts() {
@@ -373,12 +485,22 @@ function renderCart() {
         const product = productsById.get(productId);
         return sum + (product ? product.price * quantity : 0);
     }, 0);
-    const freight = subtotal > 0 ? (subtotal >= 150 ? 0 : 12.99) : 0;
+    const freight = subtotal > 0 ? (subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING) : 0;
+    const freeShippingGap = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
+    const shippingProgress = subtotal <= 0
+        ? 0
+        : Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
 
     cartCount.textContent = `${count} item${count === 1 ? "" : "s"}`;
     cartSubtotal.textContent = currency(subtotal);
     shippingEstimate.textContent = freight === 0 && subtotal > 0 ? "Free" : currency(freight);
     cartTotal.textContent = currency(subtotal + freight);
+    shippingMessage.textContent = subtotal > 0 && freeShippingGap === 0
+        ? "You unlocked free shipping."
+        : `Add ${currency(freeShippingGap || FREE_SHIPPING_THRESHOLD)} to unlock free shipping.`;
+    shippingProgressBar.style.width = `${shippingProgress}%`;
+    clearCartButton.disabled = !entries.length;
+    saveCart();
 
     if (!entries.length) {
         cartItems.innerHTML = `
@@ -457,6 +579,22 @@ function clearFilters() {
     sortFilter.value = "featured";
     searchInput.value = "";
     renderProducts();
+    saveFilters();
+}
+
+function handleFiltersChange() {
+    renderProducts();
+    saveFilters();
+}
+
+function clearCart() {
+    if (!cart.size) {
+        return;
+    }
+
+    cart.clear();
+    clearQuoteMessage();
+    renderCart();
 }
 
 function handleQuoteSubmit(event) {
@@ -476,17 +614,20 @@ function handleQuoteSubmit(event) {
 }
 
 populateFilters();
+loadStoredCart();
+loadStoredSelection();
 renderProducts();
 renderCart();
 renderProductDetail();
 
 productGrid.addEventListener("click", handleProductGridClick);
 cartItems.addEventListener("click", handleCartClick);
-categoryFilter.addEventListener("change", renderProducts);
-thicknessFilter.addEventListener("change", renderProducts);
-sortFilter.addEventListener("change", renderProducts);
-searchInput.addEventListener("input", renderProducts);
+categoryFilter.addEventListener("change", handleFiltersChange);
+thicknessFilter.addEventListener("change", handleFiltersChange);
+sortFilter.addEventListener("change", handleFiltersChange);
+searchInput.addEventListener("input", handleFiltersChange);
 clearFiltersButton.addEventListener("click", clearFilters);
+clearCartButton.addEventListener("click", clearCart);
 quoteForm.addEventListener("submit", handleQuoteSubmit);
 bundleButton.addEventListener("click", addBundle);
 quoteForm.addEventListener("input", clearQuoteMessage);

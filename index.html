@@ -116,7 +116,10 @@
                             <p class="eyebrow">Shopping cart</p>
                             <h2>Your order</h2>
                         </div>
-                        <span class="cart-badge" id="cartCount">0 items</span>
+                        <div class="cart-header-actions">
+                            <span class="cart-badge" id="cartCount">0 items</span>
+                            <button class="btn-secondary" id="clearCartButton" type="button">Clear cart</button>
+                        </div>
                     </div>
 
                     <div id="cartItems" class="cart-items"></div>
@@ -133,6 +136,13 @@
                         <div class="cart-total">
                             <span>Order total</span>
                             <strong id="cartTotal">$0.00</strong>
+                        </div>
+                    </div>
+
+                    <div class="shipping-status" aria-live="polite">
+                        <p id="shippingMessage">Add $150.00 to unlock free shipping.</p>
+                        <div class="shipping-progress" aria-hidden="true">
+                            <span id="shippingProgressBar"></span>
                         </div>
                     </div>
 
