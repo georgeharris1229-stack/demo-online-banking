@@ -11,4 +11,10 @@ Static storefront demo for shopping boat parts and construction materials, inclu
 
 ## Run locally
 
-Open `index.html` from the repository root in a browser.
+Run a local static server from the repository root, then open the served URL in a browser.
+
+```bash
+python3 -m http.server 8000
+```
+
+Then visit `http://127.0.0.1:8000/index.html`.

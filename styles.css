@@ -386,6 +386,13 @@ textarea {
     font-size: 1.1rem;
 }
 
+.summary-note {
+    margin: 14px 0 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
 .quote-form {
     margin-top: 24px;
     display: flex;
