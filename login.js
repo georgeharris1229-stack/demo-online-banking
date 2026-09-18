@@ -1,4 +1,5 @@
-const userStorageKey = "lumacart-user";
+const userStorageKey = "harbor-parts-co-user";
+const legacyUserStorageKey = "lumacart-user";
 const loginForm = document.getElementById("loginForm");
 const loginName = document.getElementById("loginName");
 const loginEmail = document.getElementById("loginEmail");
@@ -35,7 +36,18 @@ function readStoredUser() {
 
     try {
         const value = storage.getItem(userStorageKey);
-        return value ? JSON.parse(value) : null;
+        if (value) {
+            return JSON.parse(value);
+        }
+
+        const legacyValue = storage.getItem(legacyUserStorageKey);
+        if (legacyValue) {
+            storage.setItem(userStorageKey, legacyValue);
+            storage.removeItem(legacyUserStorageKey);
+            return JSON.parse(legacyValue);
+        }
+
+        return null;
     } catch {
         return null;
     }
@@ -48,6 +60,7 @@ function writeStoredUser(user) {
     }
 
     storage.setItem(userStorageKey, JSON.stringify(user));
+    storage.removeItem(legacyUserStorageKey);
 }
 
 function clearStoredUser() {
@@ -57,6 +70,7 @@ function clearStoredUser() {
     }
 
     storage.removeItem(userStorageKey);
+    storage.removeItem(legacyUserStorageKey);
 }
 
 function renderUser() {

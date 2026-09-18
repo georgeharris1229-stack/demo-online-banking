@@ -170,13 +170,23 @@ const storage = (() => {
         return null;
     }
 })();
+const STORAGE_PREFIX = "harbor-parts-co";
+const LEGACY_STORAGE_PREFIX = "lumacart";
 const storageKeys = {
-    cart: "lumacart-cart",
-    filters: "lumacart-filters",
-    selectedProductId: "lumacart-selected-product",
-    wishlist: "lumacart-wishlist",
-    coupon: "lumacart-coupon",
-    user: "lumacart-user"
+    cart: `${STORAGE_PREFIX}-cart`,
+    filters: `${STORAGE_PREFIX}-filters`,
+    selectedProductId: `${STORAGE_PREFIX}-selected-product`,
+    wishlist: `${STORAGE_PREFIX}-wishlist`,
+    coupon: `${STORAGE_PREFIX}-coupon`,
+    user: `${STORAGE_PREFIX}-user`
+};
+const legacyStorageKeys = {
+    cart: `${LEGACY_STORAGE_PREFIX}-cart`,
+    filters: `${LEGACY_STORAGE_PREFIX}-filters`,
+    selectedProductId: `${LEGACY_STORAGE_PREFIX}-selected-product`,
+    wishlist: `${LEGACY_STORAGE_PREFIX}-wishlist`,
+    coupon: `${LEGACY_STORAGE_PREFIX}-coupon`,
+    user: `${LEGACY_STORAGE_PREFIX}-user`
 };
 
 const cart = new Map();
@@ -285,14 +295,28 @@ function uniqueValues(key) {
     return [...new Set(products.map((product) => product[key]))];
 }
 
-function readStoredJson(key) {
+function readStoredValue(key, legacyKey = "") {
     if (!storage) {
         return null;
     }
 
     try {
         const value = storage.getItem(key);
-        return value ? JSON.parse(value) : null;
+        if (value !== null) {
+            return value;
+        }
+
+        if (!legacyKey) {
+            return null;
+        }
+
+        const legacyValue = storage.getItem(legacyKey);
+        if (legacyValue !== null) {
+            storage.setItem(key, legacyValue);
+            storage.removeItem(legacyKey);
+        }
+
+        return legacyValue;
     } catch {
         return null;
     }
@@ -314,24 +338,47 @@ function handleRecommendationsClick(event) {
     addToCart(addButton.dataset.recommendId, 1);
 }
 
-function writeStoredJson(key, value) {
+function readStoredJson(key, legacyKey = "") {
+    const value = readStoredValue(key, legacyKey);
+    if (!value) {
+        return null;
+    }
+
+    try {
+        return JSON.parse(value);
+    } catch {
+        return null;
+    }
+}
+
+function writeStoredValue(key, value, legacyKey = "") {
     if (!storage) {
         return;
     }
 
-    storage.setItem(key, JSON.stringify(value));
+    storage.setItem(key, value);
+    if (legacyKey) {
+        storage.removeItem(legacyKey);
+    }
 }
 
-function removeStoredValue(key) {
+function writeStoredJson(key, value, legacyKey = "") {
+    writeStoredValue(key, JSON.stringify(value), legacyKey);
+}
+
+function removeStoredValue(key, legacyKey = "") {
     if (!storage) {
         return;
     }
 
     storage.removeItem(key);
+    if (legacyKey) {
+        storage.removeItem(legacyKey);
+    }
 }
 
 function loadStoredUser() {
-    const storedUser = readStoredJson(storageKeys.user);
+    const storedUser = readStoredJson(storageKeys.user, legacyStorageKeys.user);
     if (!storedUser || typeof storedUser !== "object") {
         return;
     }
@@ -353,14 +400,14 @@ function loadStoredSelection() {
         return;
     }
 
-    const storedProductId = storage.getItem(storageKeys.selectedProductId);
+    const storedProductId = readStoredValue(storageKeys.selectedProductId, legacyStorageKeys.selectedProductId);
     if (storedProductId && productsById.has(storedProductId)) {
         selectedProductId = storedProductId;
     }
 }
 
 function loadStoredFilters() {
-    const storedFilters = readStoredJson(storageKeys.filters);
+    const storedFilters = readStoredJson(storageKeys.filters, legacyStorageKeys.filters);
     if (!storedFilters) {
         return;
     }
@@ -388,11 +435,11 @@ function saveFilters() {
         collection: thicknessFilter.value,
         sort: sortFilter.value,
         search: searchInput.value
-    });
+    }, legacyStorageKeys.filters);
 }
 
 function loadStoredCart() {
-    const storedCart = readStoredJson(storageKeys.cart);
+    const storedCart = readStoredJson(storageKeys.cart, legacyStorageKeys.cart);
     if (!Array.isArray(storedCart)) {
         return;
     }
@@ -412,11 +459,11 @@ function loadStoredCart() {
 }
 
 function saveCart() {
-    writeStoredJson(storageKeys.cart, [...cart.entries()]);
+    writeStoredJson(storageKeys.cart, [...cart.entries()], legacyStorageKeys.cart);
 }
 
 function loadStoredWishlist() {
-    const storedWishlist = readStoredJson(storageKeys.wishlist);
+    const storedWishlist = readStoredJson(storageKeys.wishlist, legacyStorageKeys.wishlist);
     if (!Array.isArray(storedWishlist)) {
         return;
     }
@@ -429,7 +476,7 @@ function loadStoredWishlist() {
 }
 
 function saveWishlist() {
-    writeStoredJson(storageKeys.wishlist, [...wishlist]);
+    writeStoredJson(storageKeys.wishlist, [...wishlist], legacyStorageKeys.wishlist);
 }
 
 function loadStoredCoupon() {
@@ -437,7 +484,7 @@ function loadStoredCoupon() {
         return;
     }
 
-    const storedCoupon = storage.getItem(storageKeys.coupon);
+    const storedCoupon = readStoredValue(storageKeys.coupon, legacyStorageKeys.coupon);
     if (storedCoupon && coupons[storedCoupon]) {
         activeCouponCode = storedCoupon;
         couponInput.value = storedCoupon;
@@ -752,9 +799,7 @@ function renderProductDetail(productId = selectedProductId) {
         .join("");
     detailAddButton.dataset.productId = product.id;
 
-    if (storage) {
-        storage.setItem(storageKeys.selectedProductId, product.id);
-    }
+    writeStoredValue(storageKeys.selectedProductId, product.id, legacyStorageKeys.selectedProductId);
 
     renderRecommendations();
 }
@@ -834,10 +879,10 @@ function renderCart() {
     const discountedSubtotal = subtotal - discount;
     const freight = discountedSubtotal > 0 ? (discountedSubtotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING) : 0;
     const tax = discountedSubtotal > 0 ? Number((discountedSubtotal * ESTIMATED_TAX_RATE).toFixed(2)) : 0;
-    const freeShippingGap = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
-    const shippingProgress = subtotal <= 0
+    const freeShippingGap = Math.max(0, FREE_SHIPPING_THRESHOLD - discountedSubtotal);
+    const shippingProgress = discountedSubtotal <= 0
         ? 0
-        : Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
+        : Math.min(100, Math.round((discountedSubtotal / FREE_SHIPPING_THRESHOLD) * 100));
     const shippingSavings = discountedSubtotal >= FREE_SHIPPING_THRESHOLD ? STANDARD_SHIPPING : 0;
     const savings = shippingSavings + discount;
     const coupon = activeCoupon();
@@ -846,18 +891,14 @@ function renderCart() {
     cartSubtotal.textContent = currency(subtotal);
     shippingEstimate.textContent = freight === 0 && subtotal > 0 ? "Free" : currency(freight);
     cartTotal.textContent = currency(discountedSubtotal + freight + tax);
-    shippingMessage.textContent = subtotal > 0 && freeShippingGap === 0
+    shippingMessage.textContent = discountedSubtotal > 0 && freeShippingGap === 0
         ? "You unlocked free shipping."
         : `Add ${currency(freeShippingGap || FREE_SHIPPING_THRESHOLD)} to unlock free shipping.`;
     shippingProgressBar.style.width = `${shippingProgress}%`;
     summaryItemCount.textContent = String(distinctItems);
     summaryUnitCount.textContent = String(count);
     summaryCoupon.textContent = coupon ? `${activeCouponCode} · ${coupon.label}` : "No coupon";
-    summaryDelivery.textContent = discountedSubtotal >= FREE_SHIPPING_THRESHOLD
-        ? "Free standard shipping"
-        : count > 0
-            ? "Standard shipping"
-            : "Standard shipping";
+    summaryDelivery.textContent = discountedSubtotal >= FREE_SHIPPING_THRESHOLD ? "Free standard shipping" : "Standard shipping";
     summaryTax.textContent = currency(tax);
     summarySavings.textContent = savings > 0 ? currency(savings) : "$0.00";
     breakdownSubtotal.textContent = currency(subtotal);
@@ -1056,16 +1097,14 @@ function applyCoupon() {
     const code = sanitizePlainText(couponInput.value).toUpperCase();
     if (!code || !coupons[code]) {
         activeCouponCode = "";
-        removeStoredValue(storageKeys.coupon);
+        removeStoredValue(storageKeys.coupon, legacyStorageKeys.coupon);
         setCouponMessage("Enter a valid coupon code like SAVE10 or WELCOME5.", "error");
         renderCart();
         return;
     }
 
     activeCouponCode = code;
-    if (storage) {
-        storage.setItem(storageKeys.coupon, code);
-    }
+    writeStoredValue(storageKeys.coupon, code, legacyStorageKeys.coupon);
     couponInput.value = code;
     setCouponMessage(`${code} applied: ${coupons[code].label}.`, "success");
     renderCart();
@@ -1078,7 +1117,7 @@ function removeCoupon() {
 
     activeCouponCode = "";
     couponInput.value = "";
-    removeStoredValue(storageKeys.coupon);
+    removeStoredValue(storageKeys.coupon, legacyStorageKeys.coupon);
     clearCouponMessage();
     renderCart();
 }
@@ -1102,7 +1141,8 @@ function handleQuoteSubmit(event) {
     quoteForm.reset();
     cart.clear();
     activeCouponCode = "";
-    removeStoredValue(storageKeys.coupon);
+    couponInput.value = "";
+    removeStoredValue(storageKeys.coupon, legacyStorageKeys.coupon);
     clearCouponMessage();
     customerNameInput.value = currentUser.name;
     customerEmailInput.value = currentUser.email;
