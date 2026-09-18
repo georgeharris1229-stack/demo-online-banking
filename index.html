@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harbor & Steel Supply</title>
+    <title>Harbor Parts Co.</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,51 +11,53 @@
         <header class="hero">
             <nav class="navbar">
                 <div class="brand">
-                    <span class="brand-mark">⚓</span>
+                    <span class="brand-mark">🛍️</span>
                     <div>
-                        <p class="eyebrow">Marine hardware & industrial stock</p>
-                        <h1>Harbor & Steel Supply</h1>
+                        <p class="eyebrow">Marine upgrades, safety gear, and dockside essentials</p>
+                        <h1>Harbor Parts Co.</h1>
                     </div>
                 </div>
                 <div class="nav-actions">
                     <a href="#catalog">Catalog</a>
-                    <a href="#materials">Material Guide</a>
-                    <a href="#cartPanel">Quote Cart</a>
+                    <a href="#materials">Why shop</a>
+                    <a href="#cartPanel">Cart</a>
+                    <a href="/login.html" id="accountLink">Login</a>
+                    <span class="account-chip" id="accountStatusChip">Guest</span>
                 </div>
             </nav>
 
             <div class="hero-content">
                 <div>
-                    <p class="eyebrow">Boat parts + structural materials in one order</p>
-                    <h2>Shop marine essentials, sheet steel, and heavy-duty construction supplies.</h2>
+                    <p class="eyebrow">Boat parts picked for weekends and working crews</p>
+                    <h2>Choose the right marine hardware, electronics, and deck gear for your boat.</h2>
                     <p class="hero-copy">
-                        Browse corrosion-resistant boat parts, dock hardware, and steel stock with
-                        multiple thickness options for fabrication and building projects.
+                        Sign in, compare trusted boat parts, and build an order with live totals,
+                        delivery guidance, and product recommendations tailored to your picks.
                     </p>
                     <div class="hero-metrics">
                         <div>
-                            <strong>150+</strong>
-                            <span>marine and jobsite products</span>
+                            <strong>80+</strong>
+                            <span>marine replacement parts</span>
                         </div>
                         <div>
-                            <strong>6</strong>
-                            <span>steel thickness options</span>
+                            <strong>4</strong>
+                            <span>fitment collections</span>
                         </div>
                         <div>
                             <strong>24h</strong>
-                            <span>quote turnaround</span>
+                            <span>dockside quote turnaround</span>
                         </div>
                     </div>
                 </div>
 
                 <aside class="hero-card">
-                    <p class="eyebrow">Popular build bundle</p>
-                    <h3>Dock Repair Starter Loadout</h3>
+                    <p class="eyebrow">Popular dockside bundle</p>
+                    <h3>Weekend Launch Kit</h3>
                     <ul>
-                        <li>316 stainless cleats</li>
-                        <li>Galvanized fastener kit</li>
-                        <li>3/16&quot; steel plate sheets</li>
-                        <li>Protective primer and sealant</li>
+                        <li>316 stainless cleat kit</li>
+                        <li>Marine fastener assortment</li>
+                        <li>LED nav light pair</li>
+                        <li>Bilge pump with float switch</li>
                     </ul>
                     <button class="btn-primary" id="bundleButton" type="button">Add bundle to cart</button>
                 </aside>
@@ -66,13 +68,13 @@
             <section class="filters-section" id="catalog">
                 <div>
                     <p class="eyebrow">Product catalog</p>
-                    <h2 id="catalogHeading">Find the right part or material</h2>
+                    <h2 id="catalogHeading">Pick the right part for your boat</h2>
                 </div>
 
                 <div class="filters-grid">
                     <label class="filter-control">
                         <span>Search</span>
-                        <input type="search" id="searchInput" placeholder="Search by product, use, or material">
+                        <input type="search" id="searchInput" placeholder="Search by product, boat use, or material">
                     </label>
 
                     <label class="filter-control">
@@ -83,9 +85,9 @@
                     </label>
 
                     <label class="filter-control">
-                        <span>Steel thickness</span>
+                        <span>Fitment</span>
                         <select id="thicknessFilter">
-                            <option value="all">All thicknesses</option>
+                            <option value="all">All fitments</option>
                         </select>
                     </label>
 
@@ -113,10 +115,13 @@
                 <aside class="cart-panel" id="cartPanel">
                     <div class="cart-header">
                         <div>
-                            <p class="eyebrow">Quote cart</p>
-                            <h2>Current order</h2>
+                            <p class="eyebrow">Shopping cart</p>
+                            <h2>Your order</h2>
                         </div>
-                        <span class="cart-badge" id="cartCount">0 items</span>
+                        <div class="cart-header-actions">
+                            <span class="cart-badge" id="cartCount">0 items</span>
+                            <button class="btn-secondary" id="clearCartButton" type="button">Clear cart</button>
+                        </div>
                     </div>
 
                     <div id="cartItems" class="cart-items"></div>
@@ -127,32 +132,136 @@
                             <strong id="cartSubtotal">$0.00</strong>
                         </div>
                         <div>
-                            <span>Demo freight estimate</span>
+                            <span>Shipping</span>
                             <strong id="shippingEstimate">$0.00</strong>
                         </div>
                         <div class="cart-total">
-                            <span>Demo order estimate</span>
+                            <span>Order total</span>
                             <strong id="cartTotal">$0.00</strong>
                         </div>
                     </div>
 
-                    <p class="summary-note">Freight and final pricing are rough demo estimates based on cart value only.</p>
+                    <div class="shipping-status" aria-live="polite">
+                        <p id="shippingMessage">Add $150.00 to unlock free shipping.</p>
+                        <div class="shipping-progress" aria-hidden="true">
+                            <span id="shippingProgressBar"></span>
+                        </div>
+                    </div>
+
+                    <div class="checkout-summary" aria-live="polite">
+                        <div>
+                            <span>Items</span>
+                            <strong id="summaryItemCount">0</strong>
+                        </div>
+                        <div>
+                            <span>Units</span>
+                            <strong id="summaryUnitCount">0</strong>
+                        </div>
+                        <div>
+                            <span>Coupon</span>
+                            <strong id="summaryCoupon">No coupon</strong>
+                        </div>
+                        <div>
+                            <span>Delivery tier</span>
+                            <strong id="summaryDelivery">Standard shipping</strong>
+                        </div>
+                        <div>
+                            <span>Estimated tax</span>
+                            <strong id="summaryTax">$0.00</strong>
+                        </div>
+                        <div>
+                            <span>Savings</span>
+                            <strong id="summarySavings">$0.00</strong>
+                        </div>
+                    </div>
+
+                    <div class="customer-summary" aria-live="polite">
+                        <div>
+                            <span>Account</span>
+                            <strong id="summaryAccount">Guest checkout</strong>
+                        </div>
+                        <div>
+                            <span>Contact</span>
+                            <strong id="summaryContact">Add your email</strong>
+                        </div>
+                        <div>
+                            <span>Ship to</span>
+                            <strong id="summaryAddress">Add a shipping address</strong>
+                        </div>
+                        <div>
+                            <span>Payment</span>
+                            <strong id="summaryPayment">Card ending in 4242</strong>
+                        </div>
+                    </div>
+
+                    <div class="checkout-breakdown" aria-live="polite">
+                        <div>
+                            <span>Merchandise</span>
+                            <strong id="breakdownSubtotal">$0.00</strong>
+                        </div>
+                        <div>
+                            <span>Discounts</span>
+                            <strong id="breakdownDiscount">-$0.00</strong>
+                        </div>
+                        <div>
+                            <span>Shipping</span>
+                            <strong id="breakdownShipping">$0.00</strong>
+                        </div>
+                        <div>
+                            <span>Estimated tax</span>
+                            <strong id="breakdownTax">$0.00</strong>
+                        </div>
+                        <div>
+                            <span>Estimated arrival</span>
+                            <strong id="breakdownEta">—</strong>
+                        </div>
+                    </div>
+
+                    <div class="coupon-panel">
+                        <label class="filter-control compact-control" for="couponInput">
+                            <span>Coupon code</span>
+                            <input type="text" id="couponInput" placeholder="Enter code">
+                        </label>
+                        <div class="coupon-actions">
+                            <button class="btn-secondary" id="applyCouponButton" type="button">Apply coupon</button>
+                            <button class="btn-secondary" id="removeCouponButton" type="button">Remove</button>
+                        </div>
+                        <p id="couponMessage" class="coupon-message" aria-live="polite"></p>
+                    </div>
+
+                    <section class="wishlist-panel" aria-labelledby="wishlistHeading">
+                        <div class="wishlist-header">
+                            <h3 id="wishlistHeading">Wishlist</h3>
+                            <span class="cart-badge" id="wishlistCount">0 saved</span>
+                        </div>
+                        <div id="wishlistItems" class="wishlist-items"></div>
+                    </section>
+
+                    <p class="summary-note">Shipping is estimated from cart value for this demo checkout experience.</p>
 
                     <form id="quoteForm" class="quote-form">
-                        <h3>Request pricing</h3>
+                        <h3>Checkout</h3>
                         <label class="filter-control">
                             <span>Name</span>
-                            <input type="text" id="customerName" placeholder="Project buyer name" required>
+                            <input type="text" id="customerName" placeholder="Full name" required>
                         </label>
                         <label class="filter-control">
                             <span>Email</span>
                             <input type="email" id="customerEmail" placeholder="you@example.com" required>
                         </label>
                         <label class="filter-control">
-                            <span>Project notes</span>
-                            <textarea id="projectNotes" rows="4" placeholder="Tell us about delivery needs, cuts, coatings, or boat model fitment"></textarea>
+                            <span>Shipping address</span>
+                            <textarea id="projectNotes" rows="4" placeholder="Street, city, state, and delivery notes" required></textarea>
                         </label>
-                        <button class="btn-primary" type="submit">Submit quote request</button>
+                        <label class="filter-control">
+                            <span>Payment method</span>
+                            <select id="paymentMethod">
+                                <option value="Card ending in 4242">Card ending in 4242</option>
+                                <option value="PayPal">PayPal</option>
+                                <option value="Apple Pay">Apple Pay</option>
+                            </select>
+                        </label>
+                        <button class="btn-primary" type="submit">Place order</button>
                     </form>
 
                     <div id="quoteMessage" class="quote-message" aria-live="polite"></div>
@@ -167,11 +276,12 @@
 
                 <div class="detail-grid">
                     <div class="detail-summary">
-                        <div class="detail-icon" id="detailIcon" aria-hidden="true">⚓</div>
+                        <div class="detail-icon" id="detailIcon" aria-hidden="true">🛍️</div>
                         <div>
-                            <p class="detail-category" id="detailCategory">Boat Parts</p>
-                            <h3 id="detailName">Choose a product to inspect its specs</h3>
-                            <p id="detailDescription">Review fitment, stock level, lead time, and material details before adding it to your quote cart.</p>
+                            <p class="detail-category" id="detailCategory">Accessories</p>
+                            <h3 id="detailName">Choose a product to inspect its details</h3>
+                            <p id="detailDescription">Review the material, fitment, stock level, and shipping timeline before adding an item to your cart.</p>
+                            <p class="detail-stock-note" id="detailStockNote">Live stock guidance appears here.</p>
                         </div>
                     </div>
 
@@ -181,7 +291,7 @@
                             <strong id="detailMaterial">—</strong>
                         </article>
                         <article>
-                            <span>Thickness</span>
+                            <span>Fitment</span>
                             <strong id="detailThickness">—</strong>
                         </article>
                         <article>
@@ -189,7 +299,7 @@
                             <strong id="detailInventory">—</strong>
                         </article>
                         <article>
-                            <span>Lead time</span>
+                            <span>Delivery</span>
                             <strong id="detailLeadTime">—</strong>
                         </article>
                     </div>
@@ -201,28 +311,37 @@
                 </div>
             </section>
 
+            <section class="recommendations-panel" aria-labelledby="recommendationsHeading">
+                <div class="section-heading">
+                    <p class="eyebrow">Recommended for you</p>
+                    <h2 id="recommendationsHeading">Suggested next picks</h2>
+                    <p id="recommendationsCaption" class="summary-note">Recommendations update from your selected boat part and cart.</p>
+                </div>
+                <div id="recommendationsGrid" class="recommendations-grid"></div>
+            </section>
+
             <section class="materials-section" id="materials">
                 <div class="section-heading">
-                    <p class="eyebrow">Material guide</p>
-                    <h2>Steel thickness options for marine and construction work</h2>
+                    <p class="eyebrow">Why shop</p>
+                    <h2>Built for boat owners who need the right part fast</h2>
                 </div>
 
                 <div class="materials-grid">
                     <article>
-                        <h3>1/8&quot; plate</h3>
-                        <p>Common for brackets, mounting tabs, deck reinforcement, and light patch panels.</p>
+                        <h3>Marine-ready catalog</h3>
+                        <p>Browse boat parts selected for deck hardware, electrical updates, anchoring, and safety upgrades.</p>
                     </article>
                     <article>
-                        <h3>3/16&quot; plate</h3>
-                        <p>Balanced option for trailer repairs, dock framing gussets, and general fabrication.</p>
+                        <h3>Fast fitment filters</h3>
+                        <p>Use search, category, and fitment filters to narrow the catalog and compare the right part faster.</p>
                     </article>
                     <article>
-                        <h3>1/4&quot; plate</h3>
-                        <p>Good fit for structural base plates, bollards, heavy equipment supports, and ramps.</p>
+                        <h3>Live cart totals</h3>
+                        <p>Track quantities, shipping, tax, and savings in real time while building your boat-parts order.</p>
                     </article>
                     <article>
-                        <h3>3/8&quot; plate</h3>
-                        <p>Selected for higher-load applications including seawall braces and skid-resistant platforms.</p>
+                        <h3>Dockside checkout</h3>
+                        <p>Sign in, review your checkout summary, and place a demo order with delivery guidance.</p>
                     </article>
                 </div>
             </section>
